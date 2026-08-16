@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="fr" class="antialiased">
+<html lang="en" class="antialiased">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thot — Éditeur Markdown & Export PDF</title>
+    <title>Thot — Markdown Editor & Native A4 PDF Exporter</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div id="app">
-      <!-- Barre d'outils supérieure inspirée du site web -->
+      <!-- Minimalist top toolbar -->
       <header class="app-header no-print">
         <div class="header-left">
           <div class="brand">
@@ -24,10 +24,10 @@
 
         <div class="toolbar-actions">
           <div class="control-group">
-            <label for="font-select">Typographie</label>
+            <label for="font-select">Typography</label>
             <select id="font-select" class="select-input">
-              <optgroup label="Polices Système">
-                <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Sans-Serif (Défaut)</option>
+              <optgroup label="System Fonts">
+                <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Sans-Serif (Default)</option>
                 <option value="Arial, sans-serif">Arial</option>
                 <option value="Verdana, sans-serif">Verdana</option>
                 <option value="Georgia, serif">Georgia</option>
@@ -48,53 +48,53 @@
           </div>
 
           <div class="control-group">
-            <label class="checkbox-container" title="Afficher ou masquer la numérotation des pages">
+            <label class="checkbox-container" title="Show or hide page numbers">
               <input type="checkbox" id="toggle-footer" />
-              <span class="checkbox-label">Numéros de page</span>
+              <span class="checkbox-label">Page numbers</span>
             </label>
           </div>
 
-          <button id="export-pdf-btn" class="btn-primary" title="Exporter au format PDF A4 (Ctrl+P)">
+          <button id="export-pdf-btn" class="btn-primary" title="Export to A4 PDF (Ctrl+P)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
               <rect x="6" y="14" width="12" height="8"></rect>
             </svg>
-            <span>Exporter en PDF</span>
+            <span>Export to PDF</span>
           </button>
         </div>
       </header>
 
-      <!-- Zone principale bicolonne -->
+      <!-- Main dual-pane container -->
       <main class="main-container">
-        <!-- Panneau d'édition Markdown -->
+        <!-- Markdown editor pane -->
         <section class="editor-pane no-print">
           <div class="pane-header">
             <div class="pane-title">
               <span class="dot-indicator"></span>
-              <h2>Éditeur Markdown</h2>
+              <h2>Markdown Editor</h2>
             </div>
             <div class="stats-badge">
-              <span id="page-count-badge">1 page</span> • <span id="word-count">0 mots</span> • <span id="char-count">0 caractères</span>
+              <span id="page-count-badge">1 page</span> • <span id="word-count">0 words</span> • <span id="char-count">0 characters</span>
             </div>
           </div>
           <textarea
             id="markdown-input"
-            placeholder="Rédigez votre document en Markdown..."
+            placeholder="Write your Markdown document here..."
             spellcheck="true"
           ></textarea>
         </section>
 
-        <!-- Panneau d'aperçu multi-pages A4 -->
+        <!-- Multi-page A4 preview pane -->
         <section class="preview-pane">
           <div class="pane-header no-print">
             <div class="pane-title">
-              <h2>Aperçu Impression</h2>
+              <h2>Print Preview</h2>
             </div>
-            <span class="preview-hint" id="preview-page-indicator">Feuilles A4 (210mm × 297mm)</span>
+            <span class="preview-hint" id="preview-page-indicator">A4 Sheets (210mm × 297mm)</span>
           </div>
           <div id="preview-canvas" class="preview-canvas">
-            <!-- Feuilles A4 générées dynamiquement -->
+            <!-- Dynamically generated A4 sheets -->
           </div>
         </section>
       </main>

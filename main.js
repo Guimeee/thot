@@ -480,7 +480,7 @@ function exportDocumentToPdf() {
 - [x] Write your Markdown in the left editor pane
 - [x] Select your preferred typography in the top bar
 - [x] Toggle page numbers on or off as desired
-- [x] Click **"Exporter en PDF"** (or press \`Ctrl+P\`) to save your document
+- [x] Click **"Export to PDF"** (or press \`Ctrl+P\`) to save your document
 `;
 
 // Initialisation au chargement
