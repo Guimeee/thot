@@ -1,8 +1,7 @@
 /* ==========================================================================
-   Thot - Éditeur Markdown WYSIWYG & Export PDF
+   Thot - Éditeur Markdown WYSIWYG & Export PDF Multi-Pages
    ========================================================================== */
 
-/* Variables CSS */
 :root {
   --primary-color: #4f46e5;
   --primary-hover: #4338ca;
@@ -10,15 +9,16 @@
   --header-text: #f8fafc;
   --editor-bg: #1e293b;
   --editor-text: #f1f5f9;
-  --canvas-bg: #cbd5e1;
+  --canvas-bg: #94a3b8;
   --border-color: #334155;
   --text-muted: #94a3b8;
   --a4-width: 210mm;
-  --a4-min-height: 297mm;
-  --a4-padding: 20mm;
+  --a4-height: 297mm;
+  --a4-padding-top: 20mm;
+  --a4-padding-bottom: 15mm;
+  --a4-padding-x: 20mm;
 }
 
-/* Reset de base */
 * {
   margin: 0;
   padding: 0;
@@ -218,43 +218,75 @@ html, body {
 }
 
 .preview-pane .pane-header {
-  background-color: #e2e8f0;
-  color: #475569;
+  background-color: #cbd5e1;
+  color: #334155;
 }
 
 .preview-hint {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #475569;
   font-weight: normal;
 }
 
 .preview-canvas {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 30px 20px 60px 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
 /* ==========================================================================
-   Simulation Page A4
+   Simulation Feuilles A4 Multi-Pages
    ========================================================================== */
 .a4-page {
   width: var(--a4-width);
-  min-height: var(--a4-min-height);
-  padding: var(--a4-padding);
+  height: var(--a4-height);
+  min-height: var(--a4-height);
+  max-height: var(--a4-height);
+  padding: var(--a4-padding-top) var(--a4-padding-x) var(--a4-padding-bottom) var(--a4-padding-x);
   background-color: #ffffff;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22), 0 4px 10px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
   box-sizing: border-box;
   color: #1e293b;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.page-content {
+  flex: 1;
+  overflow: hidden;
   line-height: 1.6;
   font-size: 11pt;
   word-wrap: break-word;
 }
 
-/* Typographie Markdown dans la page A4 */
-.a4-page h1 {
+.page-footer {
+  height: 8mm;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 4mm;
+  flex-shrink: 0;
+}
+
+.page-number {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  font-family: monospace;
+  user-select: none;
+}
+
+/* Typographie Markdown dans chaque feuille A4 */
+.page-content h1 {
   font-size: 22pt;
   font-weight: 700;
   color: #0f172a;
@@ -265,26 +297,26 @@ html, body {
   line-height: 1.25;
 }
 
-.a4-page h2 {
+.page-content h2 {
   font-size: 16pt;
   font-weight: 600;
   color: #1e293b;
-  margin-top: 18pt;
+  margin-top: 16pt;
   margin-bottom: 8pt;
   padding-bottom: 4pt;
   border-bottom: 1px solid #e2e8f0;
   line-height: 1.3;
 }
 
-.a4-page h3 {
+.page-content h3 {
   font-size: 13pt;
   font-weight: 600;
   color: #334155;
-  margin-top: 14pt;
+  margin-top: 12pt;
   margin-bottom: 6pt;
 }
 
-.a4-page h4, .a4-page h5, .a4-page h6 {
+.page-content h4, .page-content h5, .page-content h6 {
   font-size: 11pt;
   font-weight: 600;
   color: #475569;
@@ -292,21 +324,21 @@ html, body {
   margin-bottom: 4pt;
 }
 
-.a4-page p {
+.page-content p {
   margin-bottom: 10pt;
   text-align: justify;
 }
 
-.a4-page ul, .a4-page ol {
+.page-content ul, .page-content ol {
   padding-left: 20pt;
   margin-bottom: 10pt;
 }
 
-.a4-page li {
+.page-content li {
   margin-bottom: 3pt;
 }
 
-.a4-page blockquote {
+.page-content blockquote {
   border-left: 4px solid var(--primary-color);
   background-color: #f8fafc;
   padding: 8pt 14pt;
@@ -316,11 +348,11 @@ html, body {
   border-radius: 0 4px 4px 0;
 }
 
-.a4-page blockquote p:last-child {
+.page-content blockquote p:last-child {
   margin-bottom: 0;
 }
 
-.a4-page code {
+.page-content code {
   font-family: "Fira Code", Consolas, Monaco, monospace;
   font-size: 0.9em;
   background-color: #f1f5f9;
@@ -330,7 +362,7 @@ html, body {
   border: 1px solid #e2e8f0;
 }
 
-.a4-page pre {
+.page-content pre {
   background-color: #0f172a;
   color: #f8fafc;
   padding: 12pt;
@@ -339,7 +371,7 @@ html, body {
   margin: 12pt 0;
 }
 
-.a4-page pre code {
+.page-content pre code {
   background-color: transparent;
   color: inherit;
   padding: 0;
@@ -348,42 +380,42 @@ html, body {
   line-height: 1.45;
 }
 
-.a4-page table {
+.page-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 14pt 0;
+  margin: 12pt 0;
   font-size: 10pt;
 }
 
-.a4-page th, .a4-page td {
+.page-content th, .page-content td {
   border: 1px solid #cbd5e1;
   padding: 6pt 10pt;
   text-align: left;
 }
 
-.a4-page th {
+.page-content th {
   background-color: #f1f5f9;
   font-weight: 600;
   color: #0f172a;
 }
 
-.a4-page tr:nth-child(even) td {
+.page-content tr:nth-child(even) td {
   background-color: #f8fafc;
 }
 
-.a4-page hr {
+.page-content hr {
   border: none;
   border-top: 1px solid #e2e8f0;
-  margin: 16pt 0;
+  margin: 14pt 0;
 }
 
-.a4-page img {
+.page-content img {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
 }
 
-.a4-page a {
+.page-content a {
   color: var(--primary-color);
   text-decoration: underline;
 }
@@ -393,20 +425,19 @@ html, body {
    ========================================================================== */
 @page {
   size: A4 portrait;
-  margin: 15mm;
+  margin: 0;
 }
 
 @media print {
-  /* Réinitialisation de la page */
   html, body {
-    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
+    height: auto !important;
     overflow: visible !important;
-    font-size: 10.5pt;
   }
 
-  /* Masquer tous les éléments superflus */
   .no-print,
   .app-header,
   .editor-pane,
@@ -428,27 +459,33 @@ html, body {
     background: transparent !important;
   }
 
-  /* Zone de rendu plein format sans ombres ni marges externes */
+  /* Chaque feuille A4 est imprimée sur une page physique distincte */
   .a4-page {
-    width: 100% !important;
-    min-height: auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 20mm 20mm 15mm 20mm !important;
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
     background: #ffffff !important;
-    color: #000000 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    box-sizing: border-box !important;
   }
 
-  /* Gestion des sauts de page propres */
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after: avoid;
-    break-after: avoid;
+  .a4-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
   }
 
-  table, pre, blockquote, img, tr {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  .page-footer {
+    border-top: 1px solid #e2e8f0 !important;
+  }
+
+  .page-number {
+    color: #64748b !important;
   }
 }

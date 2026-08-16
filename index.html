@@ -63,7 +63,7 @@
           <div class="pane-header">
             <h2>Éditeur Markdown</h2>
             <div class="stats-badge">
-              <span id="word-count">0 mots</span> • <span id="char-count">0 caractères</span>
+              <span id="page-count-badge">1 page</span> • <span id="word-count">0 mots</span> • <span id="char-count">0 caractères</span>
             </div>
           </div>
           <textarea
@@ -73,14 +73,14 @@
           ></textarea>
         </section>
 
-        <!-- Panneau d'aperçu / rendu A4 -->
+        <!-- Panneau d'aperçu / rendu multi-pages A4 -->
         <section class="preview-pane">
           <div class="pane-header no-print">
             <h2>Aperçu A4</h2>
-            <span class="preview-hint">Rendu réel d'impression (210mm × 297mm)</span>
+            <span class="preview-hint" id="preview-page-indicator">Feuilles A4 (210mm × 297mm)</span>
           </div>
-          <div class="preview-canvas">
-            <article id="preview" class="a4-page"></article>
+          <div id="preview-canvas" class="preview-canvas">
+            <!-- Les pages .a4-page sont générées dynamiquement ici -->
           </div>
         </section>
       </main>

@@ -8,11 +8,13 @@ marked.setOptions({
 
 // Éléments du DOM
 const markdownInput = document.getElementById('markdown-input');
-const preview = document.getElementById('preview');
+const previewCanvas = document.getElementById('preview-canvas');
 const fontSelect = document.getElementById('font-select');
 const exportPdfBtn = document.getElementById('export-pdf-btn');
 const wordCountEl = document.getElementById('word-count');
 const charCountEl = document.getElementById('char-count');
+const pageCountBadge = document.getElementById('page-count-badge');
+const previewPageIndicator = document.getElementById('preview-page-indicator');
 
 // Configuration des Google Fonts
 const GOOGLE_FONTS = {
@@ -50,12 +52,11 @@ const GOOGLE_FONTS = {
   }
 };
 
-// Cache des polices chargées dynamiquement
 const loadedFonts = new Set();
+let currentFontFamily = "'Roboto', sans-serif";
 
 /**
  * Charge une Google Font dynamiquement dans le <head> si nécessaire
- * @param {string} fontName
  */
 function loadGoogleFont(fontName) {
   const fontConfig = GOOGLE_FONTS[fontName];
@@ -71,45 +72,341 @@ function loadGoogleFont(fontName) {
 }
 
 /**
- * Applique la police sélectionnée à la zone de prévisualisation
- * @param {string} fontValue
+ * Applique la police sélectionnée
  */
-function applyFont(fontValue) {
+function setFont(fontValue) {
   if (GOOGLE_FONTS[fontValue]) {
     loadGoogleFont(fontValue);
-    preview.style.fontFamily = GOOGLE_FONTS[fontValue].family;
+    currentFontFamily = GOOGLE_FONTS[fontValue].family;
   } else {
-    preview.style.fontFamily = fontValue;
+    currentFontFamily = fontValue;
+  }
+  document.documentElement.style.setProperty('--doc-font', currentFontFamily);
+  applyFontToAllPages();
+  paginate();
+}
+
+function applyFontToAllPages() {
+  const pageContents = previewCanvas.querySelectorAll('.page-content');
+  pageContents.forEach((el) => {
+    el.style.fontFamily = currentFontFamily;
+  });
+}
+
+/**
+ * Crée un élément DOM de page A4
+ */
+function createPageElement(pageIndex) {
+  const page = document.createElement('article');
+  page.className = 'a4-page';
+  page.dataset.pageNumber = pageIndex;
+
+  const content = document.createElement('div');
+  content.className = 'page-content';
+  content.style.fontFamily = currentFontFamily;
+  page.appendChild(content);
+
+  const footer = document.createElement('div');
+  footer.className = 'page-footer';
+  footer.innerHTML = `<span class="page-number">Page ${pageIndex}</span>`;
+  page.appendChild(footer);
+
+  return page;
+}
+
+/**
+ * Découpe et distribue un élément s'il dépasse la hauteur autorisée
+ */
+function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
+  let content = getCurrentContent();
+  content.appendChild(el);
+
+  if (content.scrollHeight <= maxHeight) {
+    return;
+  }
+
+  const tag = el.tagName.toLowerCase();
+
+  // 1. Découpage des listes UL / OL
+  if (tag === 'ul' || tag === 'ol') {
+    const items = Array.from(el.children);
+    content.removeChild(el);
+
+    let currentList = document.createElement(tag);
+    if (tag === 'ol' && el.hasAttribute('start')) {
+      currentList.start = el.start;
+    }
+    content.appendChild(currentList);
+
+    let olCounter = tag === 'ol' ? (parseInt(el.getAttribute('start')) || 1) : 1;
+
+    for (let j = 0; j < items.length; j++) {
+      const item = items[j];
+      currentList.appendChild(item);
+
+      if (content.scrollHeight > maxHeight) {
+        currentList.removeChild(item);
+
+        if (currentList.children.length === 0) {
+          content.removeChild(currentList);
+        }
+
+        content = createNextPage();
+        currentList = document.createElement(tag);
+        if (tag === 'ol') {
+          currentList.start = olCounter;
+        }
+        content.appendChild(currentList);
+        currentList.appendChild(item);
+      }
+      olCounter++;
+    }
+    return;
+  }
+
+  // 2. Découpage des tableaux TABLE
+  if (tag === 'table') {
+    const thead = el.querySelector('thead');
+    const tbody = el.querySelector('tbody');
+    const rows = tbody ? Array.from(tbody.querySelectorAll('tr')) : Array.from(el.querySelectorAll('tr'));
+
+    content.removeChild(el);
+
+    let currentTable = document.createElement('table');
+    if (thead) currentTable.appendChild(thead.cloneNode(true));
+    let currentTbody = document.createElement('tbody');
+    currentTable.appendChild(currentTbody);
+    content.appendChild(currentTable);
+
+    for (let j = 0; j < rows.length; j++) {
+      const row = rows[j];
+      currentTbody.appendChild(row);
+
+      if (content.scrollHeight > maxHeight) {
+        currentTbody.removeChild(row);
+
+        if (currentTbody.children.length === 0) {
+          content.removeChild(currentTable);
+        }
+
+        content = createNextPage();
+        currentTable = document.createElement('table');
+        if (thead) currentTable.appendChild(thead.cloneNode(true));
+        currentTbody = document.createElement('tbody');
+        currentTable.appendChild(currentTbody);
+        content.appendChild(currentTable);
+        currentTbody.appendChild(row);
+      }
+    }
+    return;
+  }
+
+  // 3. Gestion des paragraphes longs P
+  if (tag === 'p') {
+    content.removeChild(el);
+
+    // Si la page contient déjà d'autres éléments, on essaye de placer le paragraphe sur une nouvelle page
+    if (content.children.length > 0) {
+      content = createNextPage();
+      content.appendChild(el);
+
+      if (content.scrollHeight <= maxHeight) {
+        return;
+      }
+    }
+
+    // Si le paragraphe dépasse même sur une page vierge, découpage mot par mot
+    splitParagraphWords(el, createNextPage, () => content, maxHeight);
+    return;
+  }
+
+  // 4. Blocs de code PRE
+  if (tag === 'pre') {
+    content.removeChild(el);
+
+    if (content.children.length > 0) {
+      content = createNextPage();
+      content.appendChild(el);
+
+      if (content.scrollHeight <= maxHeight) {
+        return;
+      }
+    }
+
+    splitPreLines(el, createNextPage, () => content, maxHeight);
+    return;
+  }
+
+  // Pour les titres (H1-H6), citations, images, séparateurs
+  content.removeChild(el);
+  content = createNextPage();
+  content.appendChild(el);
+}
+
+function splitParagraphWords(pEl, createNextPage, getCurrentContent, maxHeight) {
+  let content = getCurrentContent();
+  const text = pEl.innerHTML;
+  const words = text.split(' ');
+  pEl.innerHTML = '';
+  content.appendChild(pEl);
+
+  let currentP = pEl;
+  let wordBuf = [];
+
+  for (let w = 0; w < words.length; w++) {
+    wordBuf.push(words[w]);
+    currentP.innerHTML = wordBuf.join(' ');
+
+    if (content.scrollHeight > maxHeight) {
+      wordBuf.pop();
+      currentP.innerHTML = wordBuf.join(' ');
+
+      content = createNextPage();
+      currentP = document.createElement('p');
+      content.appendChild(currentP);
+      wordBuf = [words[w]];
+      currentP.innerHTML = wordBuf.join(' ');
+    }
+  }
+}
+
+function splitPreLines(preEl, createNextPage, getCurrentContent, maxHeight) {
+  let content = getCurrentContent();
+  const codeEl = preEl.querySelector('code');
+  const rawCode = codeEl ? codeEl.textContent : preEl.textContent;
+  const lines = rawCode.split('\n');
+
+  content.removeChild(preEl);
+
+  let currentPre = document.createElement('pre');
+  let currentCode = document.createElement('code');
+  if (codeEl && codeEl.className) currentCode.className = codeEl.className;
+  currentPre.appendChild(currentCode);
+  content.appendChild(currentPre);
+
+  let lineBuf = [];
+  for (let l = 0; l < lines.length; l++) {
+    lineBuf.push(lines[l]);
+    currentCode.textContent = lineBuf.join('\n');
+
+    if (content.scrollHeight > maxHeight) {
+      lineBuf.pop();
+      currentCode.textContent = lineBuf.join('\n');
+
+      content = createNextPage();
+      currentPre = document.createElement('pre');
+      currentCode = document.createElement('code');
+      if (codeEl && codeEl.className) currentCode.className = codeEl.className;
+      currentPre.appendChild(currentCode);
+      content.appendChild(currentPre);
+      lineBuf = [lines[l]];
+      currentCode.textContent = lineBuf.join('\n');
+    }
   }
 }
 
 /**
- * Met à jour le compteur de mots et caractères
- * @param {string} text
+ * Évite les titres orphelins en fin de page
  */
-function updateStats(text) {
+function cleanOrphanHeadings() {
+  const pages = Array.from(previewCanvas.querySelectorAll('.a4-page'));
+  for (let i = 0; i < pages.length - 1; i++) {
+    const currentContent = pages[i].querySelector('.page-content');
+    const nextContent = pages[i + 1].querySelector('.page-content');
+
+    if (currentContent && nextContent && currentContent.lastElementChild) {
+      const last = currentContent.lastElementChild;
+      const tag = last.tagName.toUpperCase();
+      if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(tag)) {
+        currentContent.removeChild(last);
+        nextContent.insertBefore(last, nextContent.firstElementChild);
+      }
+    }
+  }
+}
+
+/**
+ * Met à jour les compteurs de mots, caractères et pages
+ */
+function updateStats(text, totalPages) {
   const trimmed = text.trim();
   const words = trimmed.length > 0 ? trimmed.split(/\s+/).length : 0;
   const chars = text.length;
 
   wordCountEl.textContent = `${words} mot${words > 1 ? 's' : ''}`;
   charCountEl.textContent = `${chars} caractère${chars > 1 ? 's' : ''}`;
+  pageCountBadge.textContent = `${totalPages} page${totalPages > 1 ? 's' : ''} A4`;
+  previewPageIndicator.textContent = `${totalPages} feuille${totalPages > 1 ? 's' : ''} A4 (210mm × 297mm)`;
 }
 
 /**
- * Convertit le Markdown en HTML et met à jour l'aperçu
+ * Moteur de pagination automatique A4
  */
-function renderMarkdown() {
-  const text = markdownInput.value;
-  preview.innerHTML = marked.parse(text);
-  updateStats(text);
+function paginate() {
+  const markdownText = markdownInput.value;
+  const rawHtml = marked.parse(markdownText);
+
+  previewCanvas.innerHTML = '';
+
+  const tempContainer = document.createElement('div');
+  tempContainer.innerHTML = rawHtml;
+  const elements = Array.from(tempContainer.children);
+
+  if (elements.length === 0) {
+    const emptyPage = createPageElement(1);
+    previewCanvas.appendChild(emptyPage);
+    updateStats(markdownText, 1);
+    return;
+  }
+
+  let pageIndex = 1;
+  let currentPage = createPageElement(pageIndex);
+  previewCanvas.appendChild(currentPage);
+  let currentContent = currentPage.querySelector('.page-content');
+
+  // Mesure de la hauteur disponible dans la feuille A4
+  const maxHeight = currentContent.clientHeight;
+
+  for (let i = 0; i < elements.length; i++) {
+    const el = elements[i];
+    appendOrSplit(
+      el,
+      () => {
+        pageIndex++;
+        currentPage = createPageElement(pageIndex);
+        previewCanvas.appendChild(currentPage);
+        currentContent = currentPage.querySelector('.page-content');
+        return currentContent;
+      },
+      () => currentContent,
+      maxHeight
+    );
+  }
+
+  cleanOrphanHeadings();
+
+  // Mise à jour de la numérotation des pages
+  const allPages = previewCanvas.querySelectorAll('.a4-page');
+  const totalPages = allPages.length;
+  allPages.forEach((page, idx) => {
+    const numEl = page.querySelector('.page-number');
+    if (numEl) {
+      numEl.textContent = `Page ${idx + 1} / ${totalPages}`;
+    }
+  });
+
+  updateStats(markdownText, totalPages);
 }
 
-// Écouteurs d'événements
-markdownInput.addEventListener('input', renderMarkdown);
+// Debounce pour fluidité de frappe
+let debounceTimer;
+markdownInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(paginate, 30);
+});
 
 fontSelect.addEventListener('change', (e) => {
-  applyFont(e.target.value);
+  setFont(e.target.value);
 });
 
 exportPdfBtn.addEventListener('click', () => {
@@ -126,7 +423,7 @@ Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents é
 ## Fonctionnalités principales
 
 - **Rendu temps réel** : Saisie Markdown fluide avec conversion instantanée.
-- **Simulation A4 fidèle** : Aperçu aux dimensions réelles (210mm × 297mm).
+- **Pagination A4 dynamique** : Répartition automatique sur plusieurs feuilles A4 réelles (210mm × 297mm).
 - **Typographie personnalisable** : Polices système & Google Fonts injectées à la volée.
 - **Export PDF natif** : Utilisation optimisée de \`window.print()\` et de règles CSS \`@media print\`.
 
@@ -138,6 +435,7 @@ Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents é
 | :--- | :---: | :--- |
 | GitHub Flavored Markdown | ✅ | Tables, listes de tâches, code blocks |
 | Google Fonts dynamiques | ✅ | Roboto, Inter, Lora, Fira Code... |
+| Pagination Automatique A4 | ✅ | Découpage propre multi-pages sans débordement |
 | Exportation Vectorielle | ✅ | PDF haute résolution généré par le navigateur |
 
 ---
@@ -162,11 +460,10 @@ function exportToPdf() {
 
 - [x] Initialiser le projet Vite
 - [x] Configurer le parseur Marked
-- [x] Styliser la simulation A4
+- [x] Styliser la simulation multi-pages A4
 - [x] Déployer avec GitHub Actions vers OVH
 `;
 
-// Initialisation au chargement de la page
+// Initialisation au chargement
 markdownInput.value = initialMarkdown;
-applyFont(fontSelect.value);
-renderMarkdown();
+setFont(fontSelect.value);
