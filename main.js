@@ -10,6 +10,7 @@ marked.setOptions({
 const markdownInput = document.getElementById('markdown-input');
 const previewCanvas = document.getElementById('preview-canvas');
 const fontSelect = document.getElementById('font-select');
+const toggleFooter = document.getElementById('toggle-footer');
 const exportPdfBtn = document.getElementById('export-pdf-btn');
 const wordCountEl = document.getElementById('word-count');
 const charCountEl = document.getElementById('char-count');
@@ -96,7 +97,7 @@ function applyFontToAllPages() {
 /**
  * Crée un élément DOM de page A4
  */
-function createPageElement(pageIndex) {
+function createPageElement(pageIndex, showFooter) {
   const page = document.createElement('article');
   page.className = 'a4-page';
   page.dataset.pageNumber = pageIndex;
@@ -106,10 +107,12 @@ function createPageElement(pageIndex) {
   content.style.fontFamily = currentFontFamily;
   page.appendChild(content);
 
-  const footer = document.createElement('div');
-  footer.className = 'page-footer';
-  footer.innerHTML = `<span class="page-number">Page ${pageIndex}</span>`;
-  page.appendChild(footer);
+  if (showFooter) {
+    const footer = document.createElement('div');
+    footer.className = 'page-footer';
+    footer.innerHTML = `<span class="page-number">Page ${pageIndex}</span>`;
+    page.appendChild(footer);
+  }
 
   return page;
 }
@@ -205,7 +208,6 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
   if (tag === 'p') {
     content.removeChild(el);
 
-    // Si la page contient déjà d'autres éléments, on essaye de placer le paragraphe sur une nouvelle page
     if (content.children.length > 0) {
       content = createNextPage();
       content.appendChild(el);
@@ -215,7 +217,6 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
       }
     }
 
-    // Si le paragraphe dépasse même sur une page vierge, découpage mot par mot
     splitParagraphWords(el, createNextPage, () => content, maxHeight);
     return;
   }
@@ -345,6 +346,7 @@ function updateStats(text, totalPages) {
 function paginate() {
   const markdownText = markdownInput.value;
   const rawHtml = marked.parse(markdownText);
+  const showFooter = toggleFooter ? toggleFooter.checked : false;
 
   previewCanvas.innerHTML = '';
 
@@ -353,14 +355,14 @@ function paginate() {
   const elements = Array.from(tempContainer.children);
 
   if (elements.length === 0) {
-    const emptyPage = createPageElement(1);
+    const emptyPage = createPageElement(1, showFooter);
     previewCanvas.appendChild(emptyPage);
     updateStats(markdownText, 1);
     return;
   }
 
   let pageIndex = 1;
-  let currentPage = createPageElement(pageIndex);
+  let currentPage = createPageElement(pageIndex, showFooter);
   previewCanvas.appendChild(currentPage);
   let currentContent = currentPage.querySelector('.page-content');
 
@@ -373,7 +375,7 @@ function paginate() {
       el,
       () => {
         pageIndex++;
-        currentPage = createPageElement(pageIndex);
+        currentPage = createPageElement(pageIndex, showFooter);
         previewCanvas.appendChild(currentPage);
         currentContent = currentPage.querySelector('.page-content');
         return currentContent;
@@ -385,15 +387,17 @@ function paginate() {
 
   cleanOrphanHeadings();
 
-  // Mise à jour de la numérotation des pages
+  // Mise à jour de la numérotation des pages (si activée)
   const allPages = previewCanvas.querySelectorAll('.a4-page');
   const totalPages = allPages.length;
-  allPages.forEach((page, idx) => {
-    const numEl = page.querySelector('.page-number');
-    if (numEl) {
-      numEl.textContent = `Page ${idx + 1} / ${totalPages}`;
-    }
-  });
+  if (showFooter) {
+    allPages.forEach((page, idx) => {
+      const numEl = page.querySelector('.page-number');
+      if (numEl) {
+        numEl.textContent = `Page ${idx + 1} / ${totalPages}`;
+      }
+    });
+  }
 
   updateStats(markdownText, totalPages);
 }
@@ -407,6 +411,10 @@ markdownInput.addEventListener('input', () => {
 
 fontSelect.addEventListener('change', (e) => {
   setFont(e.target.value);
+});
+
+toggleFooter.addEventListener('change', () => {
+  paginate();
 });
 
 exportPdfBtn.addEventListener('click', () => {
@@ -425,7 +433,7 @@ Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents é
 - **Rendu temps réel** : Saisie Markdown fluide avec conversion instantanée.
 - **Pagination A4 dynamique** : Répartition automatique sur plusieurs feuilles A4 réelles (210mm × 297mm).
 - **Typographie personnalisable** : Polices système & Google Fonts injectées à la volée.
-- **Export PDF natif** : Utilisation optimisée de \`window.print()\` et de règles CSS \`@media print\`.
+- **Export PDF natif & Couleurs exactes** : Utilisation de \`window.print()\` avec \`print-color-adjust: exact\` pour préserver tous les arrière-plans et bordures.
 
 ---
 
@@ -436,7 +444,7 @@ Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents é
 | GitHub Flavored Markdown | ✅ | Tables, listes de tâches, code blocks |
 | Google Fonts dynamiques | ✅ | Roboto, Inter, Lora, Fira Code... |
 | Pagination Automatique A4 | ✅ | Découpage propre multi-pages sans débordement |
-| Exportation Vectorielle | ✅ | PDF haute résolution généré par le navigateur |
+| Couleurs d'arrière-plan exactes | ✅ | Blocs sombres et citations préservés à l'impression |
 
 ---
 

@@ -15,7 +15,7 @@
   --a4-width: 210mm;
   --a4-height: 297mm;
   --a4-padding-top: 20mm;
-  --a4-padding-bottom: 15mm;
+  --a4-padding-bottom: 20mm;
   --a4-padding-x: 20mm;
 }
 
@@ -84,7 +84,7 @@ html, body {
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .control-group {
@@ -114,6 +114,24 @@ html, body {
 .select-input:focus {
   border-color: #818cf8;
   box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
+}
+
+/* Case à cocher stylisée pour le pied de page */
+.checkbox-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  user-select: none;
+}
+
+.checkbox-container input {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
 }
 
 .btn-primary {
@@ -258,6 +276,10 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   flex-shrink: 0;
+
+  /* Force la conservation des couleurs et fonds à l'impression */
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content {
@@ -273,9 +295,13 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #e2e8f0;
   margin-top: 4mm;
   flex-shrink: 0;
+}
+
+.page-footer.hidden-footer {
+  display: none !important;
 }
 
 .page-number {
@@ -285,7 +311,7 @@ html, body {
   user-select: none;
 }
 
-/* Typographie Markdown dans chaque feuille A4 */
+/* Typographie Markdown */
 .page-content h1 {
   font-size: 22pt;
   font-weight: 700;
@@ -339,13 +365,15 @@ html, body {
 }
 
 .page-content blockquote {
-  border-left: 4px solid var(--primary-color);
-  background-color: #f8fafc;
+  border-left: 4px solid var(--primary-color) !important;
+  background-color: #f8fafc !important;
   padding: 8pt 14pt;
   margin: 12pt 0;
   color: #475569;
   font-style: italic;
   border-radius: 0 4px 4px 0;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content blockquote p:last-child {
@@ -355,25 +383,29 @@ html, body {
 .page-content code {
   font-family: "Fira Code", Consolas, Monaco, monospace;
   font-size: 0.9em;
-  background-color: #f1f5f9;
+  background-color: #f1f5f9 !important;
   color: #0f172a;
   padding: 2px 5px;
   border-radius: 4px;
   border: 1px solid #e2e8f0;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content pre {
-  background-color: #0f172a;
-  color: #f8fafc;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
   padding: 12pt;
   border-radius: 6px;
   overflow-x: auto;
   margin: 12pt 0;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content pre code {
-  background-color: transparent;
-  color: inherit;
+  background-color: transparent !important;
+  color: inherit !important;
   padding: 0;
   border: none;
   font-size: 9.5pt;
@@ -394,13 +426,17 @@ html, body {
 }
 
 .page-content th {
-  background-color: #f1f5f9;
+  background-color: #f1f5f9 !important;
   font-weight: 600;
   color: #0f172a;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content tr:nth-child(even) td {
-  background-color: #f8fafc;
+  background-color: #f8fafc !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .page-content hr {
@@ -429,6 +465,12 @@ html, body {
 }
 
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;
@@ -466,7 +508,7 @@ html, body {
     min-height: 297mm !important;
     max-height: 297mm !important;
     margin: 0 !important;
-    padding: 20mm 20mm 15mm 20mm !important;
+    padding: 20mm 20mm 20mm 20mm !important;
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
@@ -483,6 +525,10 @@ html, body {
 
   .page-footer {
     border-top: 1px solid #e2e8f0 !important;
+  }
+
+  .page-footer.hidden-footer {
+    display: none !important;
   }
 
   .page-number {

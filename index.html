@@ -22,7 +22,7 @@
 
         <div class="toolbar-actions">
           <div class="control-group">
-            <label for="font-select">Police du document :</label>
+            <label for="font-select">Police :</label>
             <select id="font-select" class="select-input">
               <optgroup label="Polices Système">
                 <option value="Arial, sans-serif">Arial</option>
@@ -43,6 +43,14 @@
                 <option value="Fira Code">Fira Code</option>
               </optgroup>
             </select>
+          </div>
+
+          <div class="control-group">
+            <label class="checkbox-container" title="Afficher ou masquer la numérotation des pages">
+              <input type="checkbox" id="toggle-footer" />
+              <span class="checkbox-checkmark"></span>
+              <span class="checkbox-text">Numéros de page</span>
+            </label>
           </div>
 
           <button id="export-pdf-btn" class="btn-primary" title="Imprimer ou enregistrer au format PDF (Ctrl+P)">
