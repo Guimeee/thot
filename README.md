@@ -6,6 +6,8 @@
 
 **Thot** (named after the ancient Egyptian god of wisdom and writing) is a minimalist, 100% client-side web application designed to write Markdown in real time with an authentic **multi-page A4 paper preview** and export pixel-perfect **vector PDFs** natively through the browser.
 
+> 🌐 **Live Demo**: Available online at [guillaumehonore.com/thot](https://guillaumehonore.com/thot)
+
 ---
 
 ## ✨ Features
@@ -98,8 +100,18 @@ Target directory configured on the server: `./www/thot/`.
 
 ---
 
+## 🤝 Contributing & Community Ideas
+
+Thot is a free, open-source, and distraction-free Markdown editor designed for everyone.
+
+Feedback, feature ideas, and contributions are warmly welcome! If you'd like to help improve the tool:
+- **Share your ideas & suggestions**: Open an issue on GitHub to suggest new features, improvements, or report bugs.
+- **Contribute code**: Feel free to submit Pull Requests to enhance the editor, add new fonts, optimize pagination, or improve styling.
+
+Let's build a simple, reliable, and accessible Markdown writing tool together!
+
+---
+
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE) — see the [LICENSE](LICENSE) file for details.
-
-Developed with ❤️ by **Guillaume Honoré**.
