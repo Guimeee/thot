@@ -306,7 +306,7 @@ function splitPreLines(preEl, createNextPage, getCurrentContent, maxHeight) {
 }
 
 /**
- * Évite les titres orphelins en fin de page
+ * Évite les titres et séparateurs orphelins en fin de page
  */
 function cleanOrphanHeadings() {
   const pages = Array.from(previewCanvas.querySelectorAll('.a4-page'));
@@ -314,15 +314,28 @@ function cleanOrphanHeadings() {
     const currentContent = pages[i].querySelector('.page-content');
     const nextContent = pages[i + 1].querySelector('.page-content');
 
-    if (currentContent && nextContent && currentContent.lastElementChild) {
-      const last = currentContent.lastElementChild;
-      const tag = last.tagName.toUpperCase();
-      if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(tag)) {
-        currentContent.removeChild(last);
-        nextContent.insertBefore(last, nextContent.firstElementChild);
+    if (currentContent && nextContent) {
+      while (currentContent.lastElementChild) {
+        const last = currentContent.lastElementChild;
+        const tag = last.tagName.toUpperCase();
+        if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HR'].includes(tag)) {
+          currentContent.removeChild(last);
+          nextContent.insertBefore(last, nextContent.firstElementChild);
+        } else {
+          break;
+        }
       }
     }
   }
+
+  // Nettoie les pages vides créées lors des déplacements
+  const allRendered = Array.from(previewCanvas.querySelectorAll('.a4-page'));
+  allRendered.forEach((page) => {
+    const content = page.querySelector('.page-content');
+    if (content && content.children.length === 0 && previewCanvas.children.length > 1) {
+      page.remove();
+    }
+  });
 }
 
 /**
@@ -333,10 +346,10 @@ function updateStats(text, totalPages) {
   const words = trimmed.length > 0 ? trimmed.split(/\s+/).length : 0;
   const chars = text.length;
 
-  wordCountEl.textContent = `${words} mot${words > 1 ? 's' : ''}`;
-  charCountEl.textContent = `${chars} caractère${chars > 1 ? 's' : ''}`;
+  wordCountEl.textContent = `${words} word${words !== 1 ? 's' : ''}`;
+  charCountEl.textContent = `${chars} character${chars !== 1 ? 's' : ''}`;
   pageCountBadge.textContent = `${totalPages} page${totalPages > 1 ? 's' : ''} A4`;
-  previewPageIndicator.textContent = `${totalPages} feuille${totalPages > 1 ? 's' : ''} A4 (210mm × 297mm)`;
+  previewPageIndicator.textContent = `${totalPages} sheet${totalPages > 1 ? 's' : ''} A4 (210mm × 297mm)`;
 }
 
 /**
@@ -419,55 +432,55 @@ exportPdfBtn.addEventListener('click', () => {
   window.print();
 });
 
-// Document initial de démonstration
-const initialMarkdown = `# 𓁟 Thot — Éditeur Markdown & Export PDF
+// Document initial de démonstration en anglais
+const initialMarkdown = `# 𓁟 Thot — Minimalist Markdown Editor
 
-Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents élégants et les exporter nativement au format **PDF A4**.
-
----
-
-## Fonctionnalités principales
-
-- **Rendu temps réel** : Saisie Markdown fluide avec conversion instantanée.
-- **Pagination A4 dynamique** : Répartition automatique sur plusieurs feuilles A4 réelles (210mm × 297mm).
-- **Typographie personnalisable** : Polices système & Google Fonts injectées à la volée.
-- **Export PDF natif & Couleurs exactes** : Utilisation de \`window.print()\` avec \`print-color-adjust: exact\` pour préserver tous les arrière-plans et bordures.
+Welcome to **Thot**, a fast, client-side Markdown editor designed for distraction-free writing and **native A4 PDF export**.
 
 ---
 
-## Exemple de tableau comparatif
+## ⚡ Key Capabilities
 
-| Fonctionnalité | Supporté | Description |
+- **Instant Live Preview**: Real-time rendering as you write.
+- **Dynamic Multi-Page Engine**: Automatically paginates content onto authentic A4 sheets (\`210mm × 297mm\`).
+- **Typography Selection**: Switch between clean standard fonts and Google Fonts (*Inter, Roboto, Lora, Fira Code*).
+- **Exact Color Export**: Preserves dark code blocks, blockquotes, and accents during PDF print.
+
+---
+
+## 📊 Feature Comparison
+
+| Capability | Supported | Description |
 | :--- | :---: | :--- |
-| GitHub Flavored Markdown | ✅ | Tables, listes de tâches, code blocks |
-| Google Fonts dynamiques | ✅ | Inter, Roboto, Lora, Fira Code... |
-| Pagination Automatique A4 | ✅ | Découpage propre multi-pages sans débordement |
-| Couleurs d'arrière-plan exactes | ✅ | Blocs sombres et citations préservés à l'impression |
+| GitHub Flavored Markdown | ✅ | Tables, task lists, code blocks |
+| Multi-Page A4 Engine | ✅ | Seamless page distribution without overflowing |
+| Color & Background Fidelity | ✅ | Blockquotes and dark code blocks preserved |
+| 100% Client-Side | ✅ | Zero backend required, entirely private |
 
 ---
 
-## Citation & Bloc de code
+## 💻 Code Example & Integration
 
-> *"L'écriture est le reflet de la pensée organisée."*
-> — Sagesse de Thot
-
-Exemple de fonction JavaScript utilisée pour l'impression :
+Here is a quick look at how the browser-native PDF export is triggered:
 
 \`\`\`javascript
-function exportToPdf() {
-  // Déclenche l'impression native du navigateur configurée en A4
+// Native browser print integration
+function exportDocumentToPdf() {
   window.print();
 }
 \`\`\`
 
+> *"Writing is the geometry of thought, given tangible form through structure."*
+> — Principles of Thot
+
 ---
 
-## Liste de tâches
+## 📋 Quick Start Checklist
 
-- [x] Initialiser le projet Vite
-- [x] Configurer le parseur Marked
-- [x] Styliser la simulation multi-pages A4
-- [x] Déployer avec GitHub Actions vers OVH
+- [x] Write your Markdown in the left editor pane
+- [x] Select your preferred typography in the top bar
+- [x] Toggle page numbers on or off as desired
+- [x] Click **"Exporter en PDF"** (or press \`Ctrl+P\`) to save your document
 `;
 
 // Initialisation au chargement
