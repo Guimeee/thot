@@ -1,17 +1,26 @@
 /* ==========================================================================
-   Thot - Éditeur Markdown WYSIWYG & Export PDF Multi-Pages
+   Thot — Identité Visuelle Minimaliste (Zinc & Accent Rouge #dc2626)
    ========================================================================== */
 
 :root {
-  --primary-color: #4f46e5;
-  --primary-hover: #4338ca;
-  --header-bg: #0f172a;
-  --header-text: #f8fafc;
-  --editor-bg: #1e293b;
-  --editor-text: #f1f5f9;
-  --canvas-bg: #94a3b8;
-  --border-color: #334155;
-  --text-muted: #94a3b8;
+  /* Palette inspirée du portfolio */
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-light: rgba(220, 38, 38, 0.12);
+  --color-selection: rgba(220, 38, 38, 0.18);
+  
+  --zinc-50: #fafafa;
+  --zinc-100: #f4f4f5;
+  --zinc-200: #e4e4e7;
+  --zinc-300: #d4d4d8;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  --zinc-600: #52525b;
+  --zinc-700: #3f3f46;
+  --zinc-800: #27272a;
+  --zinc-900: #18181b;
+  --zinc-950: #09090b;
+
   --a4-width: 210mm;
   --a4-height: 297mm;
   --a4-padding-top: 20mm;
@@ -19,6 +28,7 @@
   --a4-padding-x: 20mm;
 }
 
+/* Reset & Typographie de base */
 * {
   margin: 0;
   padding: 0;
@@ -28,9 +38,16 @@
 html, body {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #0f172a;
-  background-color: #f8fafc;
+  color: var(--zinc-900);
+  background-color: #ffffff;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-selection);
+  color: inherit;
 }
 
 #app {
@@ -41,16 +58,15 @@ html, body {
 }
 
 /* ==========================================================================
-   Barre d'outils / En-tête
+   Barre d'outils / Header Minimaliste
    ========================================================================== */
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
-  background: var(--header-bg);
-  color: var(--header-text);
-  border-bottom: 1px solid var(--border-color);
+  padding: 12px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--zinc-200);
   flex-shrink: 0;
   gap: 16px;
 }
@@ -58,33 +74,40 @@ html, body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.logo-icon {
-  font-size: 28px;
+.brand-logo {
+  font-size: 24px;
   line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  color: var(--zinc-900);
 }
 
-.brand-text h1 {
-  font-size: 1.25rem;
+.brand-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.brand-title {
+  font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: -0.025em;
-  background: linear-gradient(135deg, #a5b4fc, #818cf8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+  color: var(--zinc-900);
 }
 
-.brand-text .tagline {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+.brand-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-red-600);
 }
 
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
 .control-group {
@@ -94,63 +117,80 @@ html, body {
 }
 
 .control-group label {
-  font-size: 0.85rem;
-  color: #cbd5e1;
+  font-size: 0.8rem;
+  color: var(--zinc-600);
   font-weight: 500;
 }
 
 .select-input {
-  background: #1e293b;
-  color: #f8fafc;
-  border: 1px solid #475569;
+  background: #ffffff;
+  color: var(--zinc-900);
+  border: 1px solid var(--zinc-300);
   border-radius: 6px;
   padding: 6px 12px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.15s ease;
+}
+
+.select-input:hover {
+  border-color: var(--zinc-400);
 }
 
 .select-input:focus {
-  border-color: #818cf8;
-  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25);
+  border-color: var(--color-red-600);
+  box-shadow: 0 0 0 2px var(--color-red-light);
 }
 
-/* Case à cocher stylisée pour le pied de page */
 .checkbox-container {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   cursor: pointer;
-  font-size: 0.85rem;
-  color: #cbd5e1;
   user-select: none;
 }
 
 .checkbox-container input {
   cursor: pointer;
-  width: 16px;
-  height: 16px;
-  accent-color: var(--primary-color);
+  width: 15px;
+  height: 15px;
+  accent-color: var(--color-red-600);
 }
 
+.checkbox-label {
+  font-size: 0.8rem;
+  color: var(--zinc-600);
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.checkbox-container:hover .checkbox-label {
+  color: var(--zinc-900);
+}
+
+/* Bouton principal rouge */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--primary-color);
+  background-color: var(--color-red-600);
   color: #ffffff;
-  border: none;
+  border: 1px solid var(--color-red-600);
   border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 0.85rem;
+  padding: 7px 16px;
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--color-red-700);
+  border-color: var(--color-red-700);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
 }
 
 .btn-primary:active {
@@ -158,12 +198,12 @@ html, body {
 }
 
 /* ==========================================================================
-   Conteneur Principal & Panneaux
+   Conteneur Principal & Double Panneau
    ========================================================================== */
 .main-container {
   display: flex;
   flex: 1;
-  height: calc(100vh - 61px);
+  height: calc(100vh - 57px);
   overflow: hidden;
 }
 
@@ -172,92 +212,113 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--zinc-200);
   flex-shrink: 0;
+  height: 38px;
+}
+
+.pane-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-red-600);
 }
 
 .pane-header h2 {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  color: var(--zinc-500);
 }
 
-/* Panneau d'édition */
+/* Panneau d'édition (Sombre élégant) */
 .editor-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--editor-bg);
-  color: var(--editor-text);
-  border-right: 1px solid var(--border-color);
+  background-color: var(--zinc-950);
+  border-right: 1px solid var(--zinc-800);
 }
 
 .editor-pane .pane-header {
-  background-color: #0f172a;
-  color: #94a3b8;
-  border-bottom: 1px solid var(--border-color);
+  background-color: var(--zinc-900);
+  border-bottom: 1px solid var(--zinc-800);
+}
+
+.editor-pane .pane-header h2 {
+  color: var(--zinc-400);
 }
 
 .stats-badge {
-  font-size: 0.75rem;
-  color: #64748b;
-  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--zinc-500);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 #markdown-input {
   flex: 1;
   width: 100%;
-  padding: 20px;
+  padding: 24px;
   background: transparent;
-  color: var(--editor-text);
+  color: var(--zinc-100);
   border: none;
   resize: none;
   outline: none;
-  font-family: "Fira Code", Consolas, "Courier New", monospace;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.92rem;
+  line-height: 1.65;
   tab-size: 2;
   overflow-y: auto;
 }
 
-#markdown-input::placeholder {
-  color: #475569;
+#markdown-input::selection {
+  background: rgba(220, 38, 38, 0.35);
+  color: #ffffff;
 }
 
-/* Panneau d'aperçu */
+#markdown-input::placeholder {
+  color: var(--zinc-600);
+}
+
+/* Panneau d'aperçu (Bureau minimaliste Zinc-100) */
 .preview-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--canvas-bg);
+  background-color: var(--zinc-100);
   overflow: hidden;
 }
 
 .preview-pane .pane-header {
-  background-color: #cbd5e1;
-  color: #334155;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--zinc-200);
 }
 
 .preview-hint {
-  font-size: 0.75rem;
-  color: #475569;
-  font-weight: normal;
+  font-size: 0.72rem;
+  color: var(--zinc-500);
+  font-weight: 500;
 }
 
 .preview-canvas {
   flex: 1;
   overflow-y: auto;
-  padding: 30px 20px 60px 20px;
+  padding: 32px 20px 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 32px;
 }
 
 /* ==========================================================================
-   Simulation Feuilles A4 Multi-Pages
+   Feuilles A4 Minimalistes
    ========================================================================== */
 .a4-page {
   width: var(--a4-width);
@@ -266,10 +327,11 @@ html, body {
   max-height: var(--a4-height);
   padding: var(--a4-padding-top) var(--a4-padding-x) var(--a4-padding-bottom) var(--a4-padding-x);
   background-color: #ffffff;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22), 0 4px 10px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--zinc-200);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   border-radius: 2px;
   box-sizing: border-box;
-  color: #1e293b;
+  color: var(--zinc-900);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -277,7 +339,7 @@ html, body {
   justify-content: space-between;
   flex-shrink: 0;
 
-  /* Force la conservation des couleurs et fonds à l'impression */
+  /* Préserve l'impression des graphiques d'arrière-plan */
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
@@ -285,8 +347,8 @@ html, body {
 .page-content {
   flex: 1;
   overflow: hidden;
-  line-height: 1.6;
-  font-size: 11pt;
+  line-height: 1.65;
+  font-size: 10.5pt;
   word-wrap: break-word;
 }
 
@@ -295,7 +357,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--zinc-200);
   margin-top: 4mm;
   flex-shrink: 0;
 }
@@ -305,59 +367,69 @@ html, body {
 }
 
 .page-number {
-  font-size: 8.5pt;
-  color: #94a3b8;
-  font-family: monospace;
+  font-size: 8pt;
+  color: var(--zinc-500);
+  font-family: ui-monospace, monospace;
   user-select: none;
 }
 
-/* Typographie Markdown */
+/* ==========================================================================
+   Typographie Markdown Intérieure
+   ========================================================================== */
 .page-content h1 {
-  font-size: 22pt;
+  font-size: 20pt;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--zinc-900);
   margin-top: 0;
   margin-bottom: 12pt;
   padding-bottom: 6pt;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid var(--zinc-200);
   line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 .page-content h2 {
-  font-size: 16pt;
+  font-size: 15pt;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--zinc-900);
   margin-top: 16pt;
   margin-bottom: 8pt;
   padding-bottom: 4pt;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--zinc-200);
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .page-content h3 {
-  font-size: 13pt;
+  font-size: 12.5pt;
   font-weight: 600;
-  color: #334155;
+  color: var(--zinc-800);
   margin-top: 12pt;
   margin-bottom: 6pt;
 }
 
 .page-content h4, .page-content h5, .page-content h6 {
-  font-size: 11pt;
+  font-size: 10.5pt;
   font-weight: 600;
-  color: #475569;
+  color: var(--zinc-700);
   margin-top: 10pt;
   margin-bottom: 4pt;
 }
 
 .page-content p {
   margin-bottom: 10pt;
+  color: var(--zinc-700);
   text-align: justify;
+}
+
+.page-content p strong {
+  color: var(--zinc-900);
 }
 
 .page-content ul, .page-content ol {
   padding-left: 20pt;
   margin-bottom: 10pt;
+  color: var(--zinc-700);
 }
 
 .page-content li {
@@ -365,11 +437,11 @@ html, body {
 }
 
 .page-content blockquote {
-  border-left: 4px solid var(--primary-color) !important;
-  background-color: #f8fafc !important;
+  border-left: 3px solid var(--color-red-600) !important;
+  background-color: var(--zinc-50) !important;
   padding: 8pt 14pt;
   margin: 12pt 0;
-  color: #475569;
+  color: var(--zinc-600);
   font-style: italic;
   border-radius: 0 4px 4px 0;
   -webkit-print-color-adjust: exact !important;
@@ -381,20 +453,20 @@ html, body {
 }
 
 .page-content code {
-  font-family: "Fira Code", Consolas, Monaco, monospace;
-  font-size: 0.9em;
-  background-color: #f1f5f9 !important;
-  color: #0f172a;
+  font-family: "Fira Code", ui-monospace, monospace;
+  font-size: 0.88em;
+  background-color: var(--zinc-100) !important;
+  color: var(--zinc-900);
   padding: 2px 5px;
   border-radius: 4px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--zinc-200);
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
 .page-content pre {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+  background-color: var(--zinc-900) !important;
+  color: var(--zinc-100) !important;
   padding: 12pt;
   border-radius: 6px;
   overflow-x: auto;
@@ -408,7 +480,7 @@ html, body {
   color: inherit !important;
   padding: 0;
   border: none;
-  font-size: 9.5pt;
+  font-size: 9pt;
   line-height: 1.45;
 }
 
@@ -416,32 +488,32 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   margin: 12pt 0;
-  font-size: 10pt;
+  font-size: 9.5pt;
 }
 
 .page-content th, .page-content td {
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--zinc-200);
   padding: 6pt 10pt;
   text-align: left;
 }
 
 .page-content th {
-  background-color: #f1f5f9 !important;
+  background-color: var(--zinc-50) !important;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--zinc-900);
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
 .page-content tr:nth-child(even) td {
-  background-color: #f8fafc !important;
+  background-color: var(--zinc-50) !important;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
 .page-content hr {
   border: none;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--zinc-200);
   margin: 14pt 0;
 }
 
@@ -452,12 +524,18 @@ html, body {
 }
 
 .page-content a {
-  color: var(--primary-color);
+  color: var(--color-red-600);
   text-decoration: underline;
+  text-decoration-color: rgba(220, 38, 38, 0.45);
+  text-underline-offset: 0.18em;
+}
+
+.page-content a:hover {
+  text-decoration-color: rgba(220, 38, 38, 0.9);
 }
 
 /* ==========================================================================
-   Règles d'impression & Export PDF (@media print)
+   Règles d'impression (@media print)
    ========================================================================== */
 @page {
   size: A4 portrait;
@@ -501,7 +579,6 @@ html, body {
     background: transparent !important;
   }
 
-  /* Chaque feuille A4 est imprimée sur une page physique distincte */
   .a4-page {
     width: 210mm !important;
     height: 297mm !important;
@@ -524,7 +601,7 @@ html, body {
   }
 
   .page-footer {
-    border-top: 1px solid #e2e8f0 !important;
+    border-top: 1px solid var(--zinc-200) !important;
   }
 
   .page-footer.hidden-footer {
@@ -532,6 +609,6 @@ html, body {
   }
 
   .page-number {
-    color: #64748b !important;
+    color: var(--zinc-500) !important;
   }
 }

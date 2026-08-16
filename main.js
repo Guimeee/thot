@@ -19,6 +19,10 @@ const previewPageIndicator = document.getElementById('preview-page-indicator');
 
 // Configuration des Google Fonts
 const GOOGLE_FONTS = {
+  'Inter': {
+    family: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    query: 'Inter:wght@300;400;500;600;700&display=swap'
+  },
   'Roboto': {
     family: "'Roboto', sans-serif",
     query: 'Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap'
@@ -30,10 +34,6 @@ const GOOGLE_FONTS = {
   'Montserrat': {
     family: "'Montserrat', sans-serif",
     query: 'Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap'
-  },
-  'Inter': {
-    family: "'Inter', sans-serif",
-    query: 'Inter:wght@300;400;500;600;700&display=swap'
   },
   'Lora': {
     family: "'Lora', serif",
@@ -54,7 +54,7 @@ const GOOGLE_FONTS = {
 };
 
 const loadedFonts = new Set();
-let currentFontFamily = "'Roboto', sans-serif";
+let currentFontFamily = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 /**
  * Charge une Google Font dynamiquement dans le <head> si nécessaire
@@ -82,7 +82,6 @@ function setFont(fontValue) {
   } else {
     currentFontFamily = fontValue;
   }
-  document.documentElement.style.setProperty('--doc-font', currentFontFamily);
   applyFontToAllPages();
   paginate();
 }
@@ -238,7 +237,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
     return;
   }
 
-  // Pour les titres (H1-H6), citations, images, séparateurs
+  // Titres (H1-H6), citations, images, hr
   content.removeChild(el);
   content = createNextPage();
   content.appendChild(el);
@@ -327,7 +326,7 @@ function cleanOrphanHeadings() {
 }
 
 /**
- * Met à jour les compteurs de mots, caractères et pages
+ * Met à jour les compteurs
  */
 function updateStats(text, totalPages) {
   const trimmed = text.trim();
@@ -366,7 +365,6 @@ function paginate() {
   previewCanvas.appendChild(currentPage);
   let currentContent = currentPage.querySelector('.page-content');
 
-  // Mesure de la hauteur disponible dans la feuille A4
   const maxHeight = currentContent.clientHeight;
 
   for (let i = 0; i < elements.length; i++) {
@@ -387,7 +385,7 @@ function paginate() {
 
   cleanOrphanHeadings();
 
-  // Mise à jour de la numérotation des pages (si activée)
+  // Numérotation des pages si activée
   const allPages = previewCanvas.querySelectorAll('.a4-page');
   const totalPages = allPages.length;
   if (showFooter) {
@@ -442,7 +440,7 @@ Bienvenue dans **Thot**, l'éditeur Markdown conçu pour créer des documents é
 | Fonctionnalité | Supporté | Description |
 | :--- | :---: | :--- |
 | GitHub Flavored Markdown | ✅ | Tables, listes de tâches, code blocks |
-| Google Fonts dynamiques | ✅ | Roboto, Inter, Lora, Fira Code... |
+| Google Fonts dynamiques | ✅ | Inter, Roboto, Lora, Fira Code... |
 | Pagination Automatique A4 | ✅ | Découpage propre multi-pages sans débordement |
 | Couleurs d'arrière-plan exactes | ✅ | Blocs sombres et citations préservés à l'impression |
 
