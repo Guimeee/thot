@@ -1,8 +1,14 @@
-# 𓁟 Thot — Markdown Editor & Native A4 PDF Exporter
+<p align="center">
+  <img src="./public/thot_icon_256.png" width="96" alt="Thot Logo" />
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
-[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF.svg?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Marked](https://img.shields.io/badge/Parser-Marked-orange.svg)](https://marked.js.org/)
+<h1 align="center">Thot — Markdown Editor & Native A4 PDF Exporter</h1>
+
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-red.svg" alt="License: MIT" /></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-6.x-646CFF.svg?logo=vite&logoColor=white" alt="Vite" /></a>
+  <a href="https://marked.js.org/"><img src="https://img.shields.io/badge/Parser-Marked-orange.svg" alt="Marked" /></a>
+</p>
 
 **Thot** (named after the ancient Egyptian god of wisdom and writing) is a minimalist, 100% client-side web application designed to write Markdown in real time with an authentic **multi-page A4 paper preview** and export pixel-perfect **vector PDFs** natively through the browser.
 

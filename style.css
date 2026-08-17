@@ -101,9 +101,11 @@ html, body {
 }
 
 .brand-logo {
-  font-size: 22px;
-  line-height: 1;
-  color: var(--zinc-900);
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 2px;
+  display: block;
 }
 
 .brand-info {
