@@ -1,9 +1,14 @@
 import { marked } from 'marked';
 
-// Configuration de Marked
-marked.setOptions({
+// Configuration de Marked avec cases à cocher interactives
+marked.use({
   gfm: true,
   breaks: true,
+  renderer: {
+    checkbox({ checked }) {
+      return `<input type="checkbox"${checked ? ' checked=""' : ''} class="task-checkbox" /> `;
+    }
+  }
 });
 
 // DOM Elements
@@ -364,6 +369,9 @@ function paginate() {
 
   const tempContainer = document.createElement('div');
   tempContainer.innerHTML = rawHtml;
+  tempContainer.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+    cb.removeAttribute('disabled');
+  });
   const elements = Array.from(tempContainer.children);
 
   if (elements.length === 0) {
@@ -454,6 +462,53 @@ fontSelect.addEventListener('change', (e) => {
 
 toggleFooter.addEventListener('change', () => {
   paginate();
+});
+
+// Interactive Task Checkboxes in Preview Canvas
+previewCanvas.addEventListener('click', (e) => {
+  const target = e.target.closest('input[type="checkbox"]');
+  if (!target) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const allCheckboxes = Array.from(previewCanvas.querySelectorAll('.page-content input[type="checkbox"]'));
+  const checkboxIndex = allCheckboxes.indexOf(target);
+  if (checkboxIndex === -1) return;
+
+  const text = markdownInput.value;
+  // Match any markdown task list line: - [ ], - [x], * [ ], + [ ], 1. [ ], etc.
+  const taskRegex = /^([ \t]*[-*+]|[ \t]*\d+\.)[ \t]+\[([ xX])\]/gm;
+  let match;
+  let count = 0;
+  let targetMatch = null;
+
+  while ((match = taskRegex.exec(text)) !== null) {
+    if (count === checkboxIndex) {
+      targetMatch = {
+        index: match.index,
+        prefix: match[1],
+        currentStatus: match[2],
+        fullMatchLength: match[0].length
+      };
+      break;
+    }
+    count++;
+  }
+
+  if (targetMatch) {
+    const newStatus = (targetMatch.currentStatus === ' ') ? 'x' : ' ';
+    const newMatchStr = `${targetMatch.prefix} [${newStatus}]`;
+    const updatedText = text.substring(0, targetMatch.index) + newMatchStr + text.substring(targetMatch.index + targetMatch.fullMatchLength);
+
+    const selectionStart = markdownInput.selectionStart;
+    const selectionEnd = markdownInput.selectionEnd;
+
+    markdownInput.value = updatedText;
+    markdownInput.setSelectionRange(selectionStart, selectionEnd);
+
+    paginate();
+  }
 });
 
 exportPdfBtn.addEventListener('click', () => {
