@@ -61,9 +61,15 @@ thot/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml       # CI/CD GitHub Actions workflow for automated FTP deploy
+├── public/                  # Static assets & multi-resolution icons
+│   ├── manifest.json        # Web App Manifest (PWA)
+│   ├── thot_icon_64.png     # 64x64 icon & header logo
+│   ├── thot_icon_128.png    # 128x128 icon
+│   ├── thot_icon_256.png    # 256x256 high-resolution icon
+│   └── thot_icon_512.png    # 512x512 app icon & social preview
 ├── .gitignore               # Ignored files and folders
 ├── index.html               # Semantic HTML structure & toolbar
-├── main.js                  # Markdown parser, dynamic fonts & pagination engine
+├── main.js                  # Markdown parser, fonts & pagination engine
 ├── package.json             # Scripts and dependencies (marked, vite)
 ├── style.css                # Minimalist design system, A4 simulation & @media print
 ├── vite.config.js           # Vite configuration with relative base paths
