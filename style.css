@@ -1,9 +1,8 @@
 /* ==========================================================================
-   Thot — Identité Visuelle Minimaliste (Zinc & Accent Rouge #dc2626)
+   Thot — Minimalist White Theme & StackEdit-Style Preview
    ========================================================================== */
 
 :root {
-  /* Palette exacte Tailwind du site */
   --color-red-600: #dc2626;
   --color-red-700: #b91c1c;
   --color-red-light: rgba(220, 38, 38, 0.12);
@@ -19,10 +18,9 @@
   --zinc-700: #3f3f46;
   --zinc-800: #27272a;
   --zinc-900: #18181b;
-  --zinc-950: #09090b;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Fira Code", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Fira Code", monospace;
 
   --a4-width: 210mm;
   --a4-height: 297mm;
@@ -31,7 +29,7 @@
   --a4-padding-x: 20mm;
 }
 
-/* Reset & Typographie du site */
+/* Reset & Typography */
 * {
   margin: 0;
   padding: 0;
@@ -54,25 +52,46 @@ html, body {
   color: inherit;
 }
 
+/* Minimal Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--zinc-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zinc-400);
+}
+
 #app {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
+  background-color: #ffffff;
 }
 
 /* ==========================================================================
-   Barre d'outils / Header Minimaliste
+   Minimalist Top Header
    ========================================================================== */
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  padding: 10px 24px;
   background: #ffffff;
   border-bottom: 1px solid var(--zinc-200);
   flex-shrink: 0;
   gap: 16px;
+  height: 52px;
 }
 
 .brand {
@@ -82,7 +101,7 @@ html, body {
 }
 
 .brand-logo {
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1;
   color: var(--zinc-900);
 }
@@ -94,7 +113,7 @@ html, body {
 }
 
 .brand-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--zinc-900);
@@ -111,7 +130,7 @@ html, body {
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .control-group {
@@ -134,7 +153,7 @@ html, body {
   color: var(--zinc-900);
   border: 1px solid var(--zinc-300);
   border-radius: 6px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   font-size: 0.82rem;
   font-weight: 500;
   outline: none;
@@ -154,15 +173,15 @@ html, body {
 .checkbox-container {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   cursor: pointer;
   user-select: none;
 }
 
 .checkbox-container input {
   cursor: pointer;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   accent-color: var(--color-red-600);
 }
 
@@ -179,18 +198,18 @@ html, body {
   color: var(--zinc-900);
 }
 
-/* Bouton principal rouge épuré */
+/* Minimalist Red Button */
 .btn-primary {
   font-family: var(--font-sans);
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   background-color: var(--color-red-600);
   color: #ffffff;
   border: 1px solid var(--color-red-600);
   border-radius: 6px;
-  padding: 6px 14px;
+  padding: 5px 14px;
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
@@ -209,101 +228,103 @@ html, body {
 }
 
 /* ==========================================================================
-   Conteneur Principal & Double Panneau
+   Dual-Pane Main Container
    ========================================================================== */
 .main-container {
   display: flex;
   flex: 1;
-  height: calc(100vh - 57px);
+  height: calc(100vh - 52px);
   overflow: hidden;
+  background-color: #ffffff;
 }
 
 .pane-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 6px 18px;
   border-bottom: 1px solid var(--zinc-200);
   flex-shrink: 0;
-  height: 38px;
+  height: 34px;
+  background-color: #ffffff;
 }
 
 .pane-title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 .dot-indicator {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background-color: var(--color-red-600);
 }
 
 .pane-header h2 {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--zinc-500);
+  letter-spacing: 0.12em;
+  color: var(--zinc-400);
 }
 
-/* Panneau d'édition (Sombre élégant) */
+/* ==========================================================================
+   White Minimalist Editor Pane
+   ========================================================================== */
 .editor-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--zinc-950);
-  border-right: 1px solid var(--zinc-800);
+  background-color: #ffffff;
+  border-right: 1px solid var(--zinc-200);
 }
 
 .editor-pane .pane-header {
-  background-color: var(--zinc-900);
-  border-bottom: 1px solid var(--zinc-800);
-}
-
-.editor-pane .pane-header h2 {
-  color: var(--zinc-400);
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--zinc-200);
 }
 
 .stats-badge {
   font-size: 0.72rem;
-  color: var(--zinc-500);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--zinc-400);
+  font-family: var(--font-mono);
 }
 
 #markdown-input {
   flex: 1;
   width: 100%;
-  padding: 24px;
-  background: transparent;
-  color: var(--zinc-100);
+  padding: 28px 36px;
+  background: #ffffff;
+  color: var(--zinc-900);
   border: none;
   resize: none;
   outline: none;
-  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.92rem;
-  line-height: 1.65;
+  font-family: var(--font-mono);
+  font-size: 0.94rem;
+  line-height: 1.7;
   tab-size: 2;
   overflow-y: auto;
 }
 
 #markdown-input::selection {
-  background: rgba(220, 38, 38, 0.35);
-  color: #ffffff;
+  background: var(--color-selection);
+  color: inherit;
 }
 
 #markdown-input::placeholder {
-  color: var(--zinc-600);
+  color: var(--zinc-400);
 }
 
-/* Panneau d'aperçu (Bureau minimaliste Zinc-100) */
+/* ==========================================================================
+   StackEdit-Style Preview Pane
+   ========================================================================== */
 .preview-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--zinc-100);
+  background-color: var(--zinc-50);
   overflow: hidden;
 }
 
@@ -314,22 +335,23 @@ html, body {
 
 .preview-hint {
   font-size: 0.72rem;
-  color: var(--zinc-500);
+  color: var(--zinc-400);
   font-weight: 500;
 }
 
 .preview-canvas {
   flex: 1;
   overflow-y: auto;
-  padding: 32px 20px 60px 20px;
+  padding: 24px 20px 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
+  background-color: var(--zinc-50);
 }
 
 /* ==========================================================================
-   Feuilles A4 Minimalistes
+   A4 Sheets (StackEdit-Inspired Style)
    ========================================================================== */
 .a4-page {
   width: var(--a4-width);
@@ -339,10 +361,10 @@ html, body {
   padding: var(--a4-padding-top) var(--a4-padding-x) var(--a4-padding-bottom) var(--a4-padding-x);
   background-color: #ffffff;
   border: 1px solid var(--zinc-200);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  border-radius: 2px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  border-radius: 3px;
   box-sizing: border-box;
-  color: var(--zinc-900);
+  color: #24292f;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -350,7 +372,6 @@ html, body {
   justify-content: space-between;
   flex-shrink: 0;
 
-  /* Préserve l'impression des graphiques d'arrière-plan */
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
@@ -379,20 +400,20 @@ html, body {
 
 .page-number {
   font-size: 8pt;
-  color: var(--zinc-500);
-  font-family: ui-monospace, monospace;
+  color: var(--zinc-400);
+  font-family: var(--font-mono);
   user-select: none;
 }
 
 /* ==========================================================================
-   Typographie Markdown Intérieure
+   StackEdit Markdown Typography
    ========================================================================== */
 .page-content h1 {
-  font-size: 20pt;
-  font-weight: 700;
-  color: var(--zinc-900);
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: #1f2328;
   margin-top: 0;
-  margin-bottom: 12pt;
+  margin-bottom: 14pt;
   padding-bottom: 6pt;
   border-bottom: 1px solid var(--zinc-200);
   line-height: 1.25;
@@ -400,9 +421,9 @@ html, body {
 }
 
 .page-content h2 {
-  font-size: 15pt;
+  font-size: 1.4rem;
   font-weight: 600;
-  color: var(--zinc-900);
+  color: #1f2328;
   margin-top: 16pt;
   margin-bottom: 8pt;
   padding-bottom: 4pt;
@@ -412,35 +433,36 @@ html, body {
 }
 
 .page-content h3 {
-  font-size: 12.5pt;
+  font-size: 1.15rem;
   font-weight: 600;
-  color: var(--zinc-800);
+  color: #1f2328;
   margin-top: 12pt;
   margin-bottom: 6pt;
 }
 
 .page-content h4, .page-content h5, .page-content h6 {
-  font-size: 10.5pt;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--zinc-700);
+  color: #24292f;
   margin-top: 10pt;
   margin-bottom: 4pt;
 }
 
 .page-content p {
   margin-bottom: 10pt;
-  color: var(--zinc-700);
+  color: #24292f;
   text-align: justify;
 }
 
 .page-content p strong {
-  color: var(--zinc-900);
+  color: #1f2328;
+  font-weight: 600;
 }
 
 .page-content ul, .page-content ol {
   padding-left: 20pt;
   margin-bottom: 10pt;
-  color: var(--zinc-700);
+  color: #24292f;
 }
 
 .page-content li {
@@ -448,12 +470,12 @@ html, body {
 }
 
 .page-content blockquote {
-  border-left: 3px solid var(--color-red-600) !important;
+  border-left: 3.5px solid var(--color-red-600) !important;
   background-color: var(--zinc-50) !important;
   padding: 8pt 14pt;
   margin: 12pt 0;
-  color: var(--zinc-600);
-  font-style: italic;
+  color: #57606a;
+  font-style: normal;
   border-radius: 0 4px 4px 0;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
@@ -463,22 +485,25 @@ html, body {
   margin-bottom: 0;
 }
 
+/* Clean Inline Code */
 .page-content code {
-  font-family: "Fira Code", ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
-  background-color: var(--zinc-100) !important;
-  color: var(--zinc-900);
-  padding: 2px 5px;
+  background-color: #f3f4f6 !important;
+  color: #1f2328;
+  padding: 2px 6px;
   border-radius: 4px;
-  border: 1px solid var(--zinc-200);
+  border: 1px solid #e5e7eb;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
+/* StackEdit-Style Code Blocks */
 .page-content pre {
-  background-color: var(--zinc-900) !important;
-  color: var(--zinc-100) !important;
-  padding: 12pt;
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+  border: 1px solid var(--zinc-200) !important;
+  padding: 12pt 14pt;
   border-radius: 6px;
   overflow-x: auto;
   margin: 12pt 0;
@@ -487,14 +512,15 @@ html, body {
 }
 
 .page-content pre code {
-  background-color: transparent !important;
+  background: transparent !important;
   color: inherit !important;
   padding: 0;
   border: none;
   font-size: 9pt;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
+/* StackEdit Tables */
 .page-content table {
   width: 100%;
   border-collapse: collapse;
@@ -504,20 +530,20 @@ html, body {
 
 .page-content th, .page-content td {
   border: 1px solid var(--zinc-200);
-  padding: 6pt 10pt;
+  padding: 7pt 10pt;
   text-align: left;
 }
 
 .page-content th {
   background-color: var(--zinc-50) !important;
   font-weight: 600;
-  color: var(--zinc-900);
+  color: #1f2328;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
 
 .page-content tr:nth-child(even) td {
-  background-color: var(--zinc-50) !important;
+  background-color: #fafbfc !important;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
@@ -537,7 +563,7 @@ html, body {
 .page-content a {
   color: var(--color-red-600);
   text-decoration: underline;
-  text-decoration-color: rgba(220, 38, 38, 0.45);
+  text-decoration-color: rgba(220, 38, 38, 0.4);
   text-underline-offset: 0.18em;
 }
 
@@ -546,7 +572,7 @@ html, body {
 }
 
 /* ==========================================================================
-   Règles d'impression (@media print)
+   Print Styles (@media print)
    ========================================================================== */
 @page {
   size: A4 portrait;
