@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/thot_icon_256.png" width="96" alt="Thot Logo" />
+  <img src="./public/thot_icon_512.png" width="110" alt="Thot Logo" />
 </p>
 
 <h1 align="center">Thot — Markdown Editor & Native A4 PDF Exporter</h1>
@@ -62,6 +62,7 @@ thot/
 │   └── workflows/
 │       └── deploy.yml       # CI/CD GitHub Actions workflow for automated FTP deploy
 ├── public/                  # Static assets & multi-resolution icons
+│   ├── favicon.ico          # Legacy & standard browser favicon
 │   ├── manifest.json        # Web App Manifest (PWA)
 │   ├── thot_icon_64.png     # 64x64 icon & header logo
 │   ├── thot_icon_128.png    # 128x128 icon
