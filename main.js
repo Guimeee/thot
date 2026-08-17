@@ -460,55 +460,14 @@ exportPdfBtn.addEventListener('click', () => {
   window.print();
 });
 
-// Clean English default sample document
-const initialMarkdown = `# 𓁟 Thot — Minimalist Markdown Editor
+// Short & minimalist default sample document
+const initialMarkdown = `# Thot — Markdown Editor
 
-Welcome to **Thot**, a fast, client-side Markdown editor designed for distraction-free writing and **native A4 PDF export**.
-
----
-
-## ⚡ Key Capabilities
-
-- **Instant Live Preview**: Real-time rendering as you write.
-- **Dynamic Multi-Page Engine**: Automatically paginates content onto authentic A4 sheets (\`210mm × 297mm\`).
-- **Typography Selection**: Switch between clean standard fonts and Google Fonts (*Inter, Roboto, Lora, Fira Code*).
-- **Exact Color Export**: Preserves code blocks, blockquotes, and accents during PDF print.
+A minimalist Markdown editor designed for distraction-free writing and clean **A4 PDF export**.
 
 ---
 
-## 📊 Feature Comparison
-
-| Capability | Supported | Description |
-| :--- | :---: | :--- |
-| GitHub Flavored Markdown | ✅ | Tables, task lists, code blocks |
-| Multi-Page A4 Engine | ✅ | Seamless page distribution without overflowing |
-| Color & Background Fidelity | ✅ | Blockquotes and code blocks preserved |
-| 100% Client-Side | ✅ | Zero backend required, entirely private |
-
----
-
-## 💻 Code Example & Integration
-
-Here is a quick look at how the browser-native PDF export is triggered:
-
-\`\`\`javascript
-// Native browser print integration
-function exportDocumentToPdf() {
-  window.print();
-}
-\`\`\`
-
-> *"Writing is the geometry of thought, given tangible form through structure."*
-> — Principles of Thot
-
----
-
-## 📋 Quick Start Checklist
-
-- [x] Write your Markdown in the left editor pane
-- [x] Select your preferred typography in the top bar
-- [x] Toggle page numbers on or off as desired
-- [x] Click **"Export to PDF"** (or press \`Ctrl+P\`) to save your document
+*Created by [Guillaume Honoré](https://guillaumehonore.com) • Free & Open Source*
 `;
 
 // Initialisation
