@@ -467,7 +467,7 @@ A minimalist Markdown editor designed for distraction-free writing and clean **A
 
 ---
 
-*Created by [Guillaume Honoré](https://guillaumehonore.com) • Free & Open Source*
+> Written with [Thot](https://guillaumehonore.com/thot)
 `;
 
 // Initialisation
