@@ -75,6 +75,15 @@
             </label>
           </div>
 
+          <button id="wiki-btn" class="btn-secondary" title="Markdown Syntax Guide & Cheat Sheet">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Wiki</span>
+          </button>
+
           <button id="export-pdf-btn" class="btn-primary" title="Export to A4 PDF (Ctrl+P)">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -119,6 +128,103 @@
           </div>
         </section>
       </main>
+
+      <!-- Markdown Syntax Guide / Wiki Modal -->
+      <div id="wiki-modal" class="modal-backdrop no-print" aria-hidden="true">
+        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="wiki-title">
+          <div class="modal-header">
+            <div class="modal-header-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+              <h3 id="wiki-title">Markdown Syntax Guide</h3>
+            </div>
+            <button id="wiki-close-btn" class="modal-close-btn" title="Close (Esc)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="wiki-grid">
+              <!-- Headings -->
+              <div class="wiki-card">
+                <h4>Headings</h4>
+                <div class="wiki-code">
+                  <code># Heading 1<br>## Heading 2<br>### Heading 3</code>
+                </div>
+              </div>
+
+              <!-- Formatting -->
+              <div class="wiki-card">
+                <h4>Styling</h4>
+                <div class="wiki-code">
+                  <code>**Bold text**<br>*Italic text*<br>~~Strikethrough~~<br>`inline code`</code>
+                </div>
+              </div>
+
+              <!-- Lists -->
+              <div class="wiki-card">
+                <h4>Lists</h4>
+                <div class="wiki-code">
+                  <code>- Bullet point<br>  - Sub-bullet<br>1. Numbered item<br>2. Second item</code>
+                </div>
+              </div>
+
+              <!-- Tasks -->
+              <div class="wiki-card">
+                <h4>Task Lists</h4>
+                <div class="wiki-code">
+                  <code>- [x] Completed task<br>- [ ] Pending task</code>
+                </div>
+              </div>
+
+              <!-- Links & Images -->
+              <div class="wiki-card">
+                <h4>Links & Images</h4>
+                <div class="wiki-code">
+                  <code>[Link text](url)<br>![Alt text](image_url.png)</code>
+                </div>
+              </div>
+
+              <!-- Blockquotes -->
+              <div class="wiki-card">
+                <h4>Blockquotes</h4>
+                <div class="wiki-code">
+                  <code>&gt; Quote line<br>&gt; — Author</code>
+                </div>
+              </div>
+
+              <!-- Tables -->
+              <div class="wiki-card wiki-card-wide">
+                <h4>Tables (GFM)</h4>
+                <div class="wiki-code">
+                  <code>| Column 1 | Column 2 | Column 3 |<br>| :--- | :---: | ---: |<br>| Left-aligned | Centered | Right-aligned |</code>
+                </div>
+              </div>
+
+              <!-- Code Blocks -->
+              <div class="wiki-card wiki-card-wide">
+                <h4>Code Blocks</h4>
+                <div class="wiki-code">
+                  <code>```javascript<br>function hello() {<br>&nbsp;&nbsp;console.log("Hello, Thot!");<br>}<br>```</code>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="wiki-card wiki-card-wide">
+                <h4>Horizontal Rule / Page Break</h4>
+                <div class="wiki-code">
+                  <code>---</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="./main.js"></script>

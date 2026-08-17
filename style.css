@@ -200,6 +200,34 @@ html, body {
   color: var(--zinc-900);
 }
 
+/* Minimalist Secondary Button (Wiki) */
+.btn-secondary {
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  color: var(--zinc-700);
+  border: 1px solid var(--zinc-300);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--zinc-400);
+  color: var(--zinc-900);
+  background-color: var(--zinc-50);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
 /* Minimalist Red Button */
 .btn-primary {
   font-family: var(--font-sans);
@@ -571,6 +599,143 @@ html, body {
 
 .page-content a:hover {
   text-decoration-color: rgba(220, 38, 38, 0.9);
+}
+
+/* ==========================================================================
+   Markdown Guide / Wiki Modal
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-container {
+  width: 90%;
+  max-width: 660px;
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--zinc-200);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(8px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.is-open .modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--zinc-200);
+  background: #ffffff;
+}
+
+.modal-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--zinc-900);
+}
+
+.modal-header-title h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--zinc-400);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--zinc-900);
+  background: var(--zinc-100);
+}
+
+.modal-body {
+  padding: 18px 20px;
+  overflow-y: auto;
+  background: var(--zinc-50);
+}
+
+.wiki-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.wiki-card {
+  background: #ffffff;
+  border: 1px solid var(--zinc-200);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.wiki-card-wide {
+  grid-column: span 2;
+}
+
+.wiki-card h4 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--zinc-500);
+}
+
+.wiki-code {
+  background: var(--zinc-100);
+  border: 1px solid var(--zinc-200);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--zinc-800);
+}
+
+.wiki-code code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: inherit !important;
 }
 
 /* ==========================================================================

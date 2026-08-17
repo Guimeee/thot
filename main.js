@@ -460,6 +460,40 @@ exportPdfBtn.addEventListener('click', () => {
   window.print();
 });
 
+// Markdown Syntax Guide / Wiki Modal
+const wikiBtn = document.getElementById('wiki-btn');
+const wikiModal = document.getElementById('wiki-modal');
+const wikiCloseBtn = document.getElementById('wiki-close-btn');
+
+function openWiki() {
+  if (wikiModal) {
+    wikiModal.classList.add('is-open');
+    wikiModal.setAttribute('aria-hidden', 'false');
+  }
+}
+
+function closeWiki() {
+  if (wikiModal) {
+    wikiModal.classList.remove('is-open');
+    wikiModal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+if (wikiBtn && wikiModal && wikiCloseBtn) {
+  wikiBtn.addEventListener('click', openWiki);
+  wikiCloseBtn.addEventListener('click', closeWiki);
+  wikiModal.addEventListener('click', (e) => {
+    if (e.target === wikiModal) {
+      closeWiki();
+    }
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && wikiModal.classList.contains('is-open')) {
+      closeWiki();
+    }
+  });
+}
+
 // Short & minimalist default sample document
 const initialMarkdown = `# Thot — Markdown Editor
 
