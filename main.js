@@ -549,6 +549,33 @@ if (wikiBtn && wikiModal && wikiCloseBtn) {
   });
 }
 
+// Mobile View Toggle (Write ↔ Preview)
+const appEl = document.getElementById('app');
+const viewEditBtn = document.getElementById('view-edit-btn');
+const viewPreviewBtn = document.getElementById('view-preview-btn');
+
+function setMobileView(view) {
+  if (!appEl) return;
+  appEl.setAttribute('data-mobile-view', view);
+
+  if (viewEditBtn && viewPreviewBtn) {
+    if (view === 'edit') {
+      viewEditBtn.classList.add('active');
+      viewPreviewBtn.classList.remove('active');
+    } else {
+      viewPreviewBtn.classList.add('active');
+      viewEditBtn.classList.remove('active');
+      paginate();
+    }
+  }
+}
+
+if (viewEditBtn && viewPreviewBtn) {
+  viewEditBtn.addEventListener('click', () => setMobileView('edit'));
+  viewPreviewBtn.addEventListener('click', () => setMobileView('preview'));
+  setMobileView('edit');
+}
+
 // Short & minimalist default sample document
 const initialMarkdown = `# Thot — Markdown Editor
 

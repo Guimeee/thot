@@ -809,6 +809,244 @@ html, body {
 }
 
 /* ==========================================================================
+   Mobile Responsive Styles & View Toggle (@media max-width: 768px)
+   ========================================================================== */
+.view-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #app {
+    height: 100dvh;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Header on Mobile */
+  .app-header {
+    height: auto;
+    padding: 8px 12px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .brand-badge {
+    display: none;
+  }
+
+  /* Segmented Toggle Control */
+  .view-toggle {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--zinc-100);
+    border: 1px solid var(--zinc-200);
+    border-radius: 7px;
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    font-family: var(--font-sans);
+    color: var(--zinc-600);
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .view-toggle-btn.active {
+    background-color: #ffffff;
+    color: var(--zinc-900);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Toolbar items on mobile */
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .control-group {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .control-group label {
+    font-size: 0.72rem;
+  }
+
+  .select-input {
+    padding: 4px 6px;
+    font-size: 0.75rem;
+    max-width: 105px;
+  }
+
+  .checkbox-label {
+    font-size: 0.72rem;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    padding: 4px 9px;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Main Container on Mobile */
+  .main-container {
+    height: calc(100dvh - 86px);
+    height: calc(100vh - 86px);
+    position: relative;
+  }
+
+  /* Pane Visibility Switching */
+  #app[data-mobile-view="edit"] .editor-pane {
+    display: flex !important;
+    width: 100% !important;
+    flex: 1 !important;
+    border-right: none;
+  }
+
+  #app[data-mobile-view="edit"] .preview-pane {
+    display: none !important;
+  }
+
+  #app[data-mobile-view="preview"] .editor-pane {
+    display: none !important;
+  }
+
+  #app[data-mobile-view="preview"] .preview-pane {
+    display: flex !important;
+    width: 100% !important;
+    flex: 1 !important;
+  }
+
+  /* Editor Textarea */
+  #markdown-input {
+    padding: 16px 14px;
+    font-size: 16px !important; /* Prevents iOS auto-zoom on input focus */
+    line-height: 1.6;
+  }
+
+  .pane-header {
+    padding: 6px 12px;
+    height: 32px;
+  }
+
+  .pane-header h2 {
+    font-size: 0.68rem;
+  }
+
+  .stats-badge {
+    font-size: 0.68rem;
+  }
+
+  /* Preview Canvas & Paper Sheets on Screen */
+  .preview-canvas {
+    padding: 12px 10px 48px 10px;
+    gap: 16px;
+    background-color: var(--zinc-100);
+  }
+
+  .a4-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 20px 14px 14px 14px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 6px !important;
+  }
+
+  .page-content {
+    overflow: visible !important;
+    font-size: 10pt !important;
+    line-height: 1.6 !important;
+  }
+
+  .page-content h1 {
+    font-size: 1.4rem !important;
+    margin-bottom: 10pt !important;
+  }
+
+  .page-content h2 {
+    font-size: 1.15rem !important;
+    margin-top: 12pt !important;
+  }
+
+  .page-content h3 {
+    font-size: 1rem !important;
+  }
+
+  .page-content table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-content pre {
+    padding: 10px 12px !important;
+    font-size: 8pt !important;
+  }
+
+  /* Wiki Modal */
+  .modal-container {
+    width: 95% !important;
+    max-width: 95% !important;
+    max-height: 88vh !important;
+    border-radius: 8px !important;
+  }
+
+  .modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .modal-body {
+    padding: 12px 12px !important;
+  }
+
+  .wiki-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .wiki-card-wide {
+    grid-column: span 1 !important;
+  }
+}
+
+/* ==========================================================================
    Print Styles (@media print)
    ========================================================================== */
 @page {
