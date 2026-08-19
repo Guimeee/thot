@@ -549,8 +549,11 @@ previewCanvas.addEventListener('click', (e) => {
   }
 });
 
-exportPdfBtn.addEventListener('click', () => {
-  window.print();
+const exportBtns = document.querySelectorAll('.export-trigger-btn, #export-pdf-btn');
+exportBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    window.print();
+  });
 });
 
 // Markdown Syntax Guide / Wiki Modal

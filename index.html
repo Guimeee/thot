@@ -33,7 +33,7 @@
     <div id="app">
       <!-- Minimalist top toolbar -->
       <header class="app-header no-print">
-        <!-- Row 1: Brand, Mode Switcher & Export PDF -->
+        <!-- Row 1: Brand & View Switcher (and Mobile Export) -->
         <div class="header-main-row">
           <div class="brand">
             <img src="./thot_icon_64.png" alt="Thot logo" class="brand-logo" width="22" height="22" />
@@ -61,8 +61,9 @@
             </button>
           </div>
 
-          <div class="header-actions">
-            <button id="export-pdf-btn" class="btn-primary" title="Export to A4 PDF (Ctrl+P)">
+          <!-- Mobile Export Button (Shown only on mobile) -->
+          <div class="mobile-export-wrapper">
+            <button type="button" class="btn-primary export-trigger-btn mobile-export-btn" title="Export to A4 PDF (Ctrl+P)">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 6 2 18 2 18 9"></polyline>
                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -73,7 +74,7 @@
           </div>
         </div>
 
-        <!-- Row 2: Typography Selector, Page Numbers & Wiki -->
+        <!-- Controls: Typography, Page Numbers, Wiki & Desktop Export -->
         <div class="header-controls-row">
           <div class="controls-left">
             <div class="control-group">
@@ -116,6 +117,16 @@
                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
               </svg>
               <span class="btn-label">Wiki</span>
+            </button>
+
+            <!-- Desktop Export Button (At the far right corner on PC) -->
+            <button id="export-pdf-btn" class="btn-primary desktop-export-btn export-trigger-btn" title="Export to A4 PDF (Ctrl+P)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              <span class="btn-label">Export to PDF</span>
             </button>
           </div>
         </div>
