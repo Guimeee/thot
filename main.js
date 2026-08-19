@@ -358,6 +358,26 @@ function updateStats(text, totalPages) {
 }
 
 /**
+ * Accurately measures the authentic A4 printable content height in pixels (~971px at standard 96dpi)
+ * Works reliably across Desktop, Tablet, and Mobile screens.
+ */
+function getA4MaxHeight() {
+  let measureEl = document.getElementById('a4-measure-ref');
+  if (!measureEl) {
+    measureEl = document.createElement('div');
+    measureEl.id = 'a4-measure-ref';
+    measureEl.style.cssText = 'position:fixed;left:-99999px;top:-99999px;width:210mm;height:297mm;padding:20mm;box-sizing:border-box;visibility:hidden;pointer-events:none;';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'height:100%;box-sizing:border-box;';
+    measureEl.appendChild(inner);
+    document.body.appendChild(measureEl);
+  }
+  const inner = measureEl.firstElementChild;
+  const h = inner ? inner.clientHeight : 0;
+  return (h && h > 400) ? h : 971;
+}
+
+/**
  * Automatic A4 pagination engine
  */
 function paginate() {
@@ -386,7 +406,7 @@ function paginate() {
   previewCanvas.appendChild(currentPage);
   let currentContent = currentPage.querySelector('.page-content');
 
-  const maxHeight = currentContent.clientHeight;
+  const maxHeight = getA4MaxHeight();
 
   for (let i = 0; i < elements.length; i++) {
     const el = elements[i];

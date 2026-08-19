@@ -86,12 +86,30 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 24px;
+  padding: 8px 20px;
   background: #ffffff;
   border-bottom: 1px solid var(--zinc-200);
   flex-shrink: 0;
   gap: 16px;
   height: 52px;
+}
+
+.header-main-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .brand {
@@ -127,12 +145,6 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: var(--color-red-600);
-}
-
-.toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
 }
 
 .control-group {
@@ -827,20 +839,24 @@ html, body {
     overflow: hidden;
   }
 
-  /* Header on Mobile */
+  /* Header on Mobile: 2 clean structured rows */
   .app-header {
     height: auto;
     padding: 8px 12px;
     flex-direction: column;
     gap: 8px;
     align-items: stretch;
+    background: #ffffff;
+    border-bottom: 1px solid var(--zinc-200);
   }
 
-  .header-left {
+  /* Row 1: Brand (left), Mode Switcher (center), Actions (right) */
+  .header-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 6px;
   }
 
   .brand-badge {
@@ -861,9 +877,9 @@ html, body {
   .view-toggle-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    font-size: 0.76rem;
+    gap: 4px;
+    padding: 4px 9px;
+    font-size: 0.75rem;
     font-weight: 500;
     font-family: var(--font-sans);
     color: var(--zinc-600);
@@ -882,42 +898,50 @@ html, body {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   }
 
-  /* Toolbar items on mobile */
-  .toolbar-actions {
-    display: flex;
+  .header-actions {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
     gap: 6px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 2px;
-  }
-
-  .control-group {
-    gap: 4px;
-    flex-shrink: 0;
-  }
-
-  .control-group label {
-    font-size: 0.72rem;
-  }
-
-  .select-input {
-    padding: 4px 6px;
-    font-size: 0.75rem;
-    max-width: 105px;
-  }
-
-  .checkbox-label {
-    font-size: 0.72rem;
   }
 
   .btn-secondary,
   .btn-primary {
-    padding: 4px 9px;
-    font-size: 0.75rem;
+    padding: 5px 9px;
+    font-size: 0.76rem;
     flex-shrink: 0;
+  }
+
+  /* Row 2: Typography & Page Numbers */
+  .header-controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 6px;
+    border-top: 1px solid var(--zinc-100);
+    gap: 8px;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .control-group label {
+    font-size: 0.75rem;
+    color: var(--zinc-600);
+  }
+
+  .select-input {
+    padding: 4px 8px;
+    font-size: 0.76rem;
+    max-width: 130px;
+  }
+
+  .checkbox-label {
+    font-size: 0.75rem;
   }
 
   /* Main Container on Mobile */
@@ -971,41 +995,43 @@ html, body {
 
   /* Preview Canvas & Paper Sheets on Screen */
   .preview-canvas {
-    padding: 12px 10px 48px 10px;
-    gap: 16px;
+    padding: 16px 12px 60px 12px;
+    gap: 18px;
     background-color: var(--zinc-100);
+    align-items: center;
   }
 
   .a4-page {
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: 540px !important;
     min-width: 0 !important;
     height: auto !important;
-    min-height: auto !important;
+    min-height: 250px !important;
     max-height: none !important;
-    padding: 20px 14px 14px 14px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-    border-radius: 6px !important;
+    padding: 24px 18px 16px 18px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+    border-radius: 8px !important;
+    background-color: #ffffff !important;
   }
 
   .page-content {
     overflow: visible !important;
-    font-size: 10pt !important;
-    line-height: 1.6 !important;
+    font-size: 10.5pt !important;
+    line-height: 1.65 !important;
   }
 
   .page-content h1 {
-    font-size: 1.4rem !important;
+    font-size: 1.45rem !important;
     margin-bottom: 10pt !important;
   }
 
   .page-content h2 {
-    font-size: 1.15rem !important;
-    margin-top: 12pt !important;
+    font-size: 1.2rem !important;
+    margin-top: 14pt !important;
   }
 
   .page-content h3 {
-    font-size: 1rem !important;
+    font-size: 1.05rem !important;
   }
 
   .page-content table {
@@ -1017,7 +1043,7 @@ html, body {
 
   .page-content pre {
     padding: 10px 12px !important;
-    font-size: 8pt !important;
+    font-size: 8.5pt !important;
   }
 
   /* Wiki Modal */
