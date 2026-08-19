@@ -106,6 +106,17 @@ html, body {
   gap: 16px;
 }
 
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -839,7 +850,7 @@ html, body {
     overflow: hidden;
   }
 
-  /* Header on Mobile: 2 clean structured rows */
+  /* Header on Mobile: 2 distinct, comfortable rows */
   .app-header {
     height: auto;
     padding: 8px 12px;
@@ -850,13 +861,13 @@ html, body {
     border-bottom: 1px solid var(--zinc-200);
   }
 
-  /* Row 1: Brand (left), Mode Switcher (center), Actions (right) */
+  /* Row 1: Brand (left), Mode Switcher (center), Wiki (right) */
   .header-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 6px;
+    gap: 8px;
   }
 
   .brand-badge {
@@ -904,14 +915,13 @@ html, body {
     gap: 6px;
   }
 
-  .btn-secondary,
-  .btn-primary {
-    padding: 5px 9px;
+  .btn-secondary {
+    padding: 4px 10px;
     font-size: 0.76rem;
     flex-shrink: 0;
   }
 
-  /* Row 2: Typography & Page Numbers */
+  /* Row 2: Typography, Page numbers (left) & Export PDF (right) */
   .header-controls-row {
     display: flex;
     align-items: center;
@@ -922,26 +932,49 @@ html, body {
     gap: 8px;
   }
 
-  .control-group {
+  .controls-left {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .controls-right {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
   }
 
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
   .control-group label {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     color: var(--zinc-600);
+    white-space: nowrap;
   }
 
   .select-input {
-    padding: 4px 8px;
+    padding: 4px 6px;
     font-size: 0.76rem;
-    max-width: 130px;
+    max-width: 110px;
   }
 
   .checkbox-label {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    padding: 5px 12px;
+    font-size: 0.76rem;
+    white-space: nowrap;
   }
 
   /* Main Container on Mobile */
@@ -996,27 +1029,33 @@ html, body {
   /* Preview Canvas & Paper Sheets on Screen */
   .preview-canvas {
     padding: 16px 12px 60px 12px;
-    gap: 18px;
+    gap: 20px;
     background-color: var(--zinc-100);
     align-items: center;
   }
 
   .a4-page {
     width: 100% !important;
-    max-width: 540px !important;
+    max-width: 480px !important;
     min-width: 0 !important;
+    aspect-ratio: 210 / 297 !important; /* Authentic A4 Paper Ratio */
     height: auto !important;
-    min-height: 250px !important;
+    min-height: auto !important;
     max-height: none !important;
-    padding: 24px 18px 16px 18px !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
-    border-radius: 8px !important;
+    padding: 24px 20px 20px 20px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07) !important;
+    border-radius: 6px !important;
     background-color: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
   }
 
   .page-content {
-    overflow: visible !important;
-    font-size: 10.5pt !important;
+    flex: 1 !important;
+    overflow: hidden !important;
+    font-size: 10pt !important;
     line-height: 1.65 !important;
   }
 

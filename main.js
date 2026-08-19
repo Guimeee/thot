@@ -406,7 +406,7 @@ function paginate() {
   previewCanvas.appendChild(currentPage);
   let currentContent = currentPage.querySelector('.page-content');
 
-  const maxHeight = getA4MaxHeight();
+  const maxHeight = currentContent.clientHeight || getA4MaxHeight();
 
   for (let i = 0; i < elements.length; i++) {
     const el = elements[i];

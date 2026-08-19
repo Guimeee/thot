@@ -33,7 +33,7 @@
     <div id="app">
       <!-- Minimalist top toolbar -->
       <header class="app-header no-print">
-        <!-- Row 1: Brand, Mode Switcher & Primary Actions -->
+        <!-- Row 1: Brand, Mode Switcher & Wiki -->
         <div class="header-main-row">
           <div class="brand">
             <img src="./thot_icon_64.png" alt="Thot logo" class="brand-logo" width="22" height="22" />
@@ -70,7 +70,45 @@
               </svg>
               <span class="btn-label">Wiki</span>
             </button>
+          </div>
+        </div>
 
+        <!-- Row 2: Typography Selector, Page Numbers & Export PDF -->
+        <div class="header-controls-row">
+          <div class="controls-left">
+            <div class="control-group">
+              <label for="font-select">Typography</label>
+              <select id="font-select" class="select-input">
+                <optgroup label="System Fonts">
+                  <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Sans-Serif (Default)</option>
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                </optgroup>
+                <optgroup label="Google Fonts">
+                  <option value="Inter" selected>Inter</option>
+                  <option value="Roboto">Roboto</option>
+                  <option value="Open Sans">Open Sans</option>
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Lora">Lora</option>
+                  <option value="Merriweather">Merriweather</option>
+                  <option value="Playfair Display">Playfair Display</option>
+                  <option value="Fira Code">Fira Code</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label class="checkbox-container" title="Show or hide page numbers">
+                <input type="checkbox" id="toggle-footer" />
+                <span class="checkbox-label">Page numbers</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="controls-right">
             <button id="export-pdf-btn" class="btn-primary" title="Export to A4 PDF (Ctrl+P)">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -79,40 +117,6 @@
               </svg>
               <span class="btn-label">Export PDF</span>
             </button>
-          </div>
-        </div>
-
-        <!-- Row 2: Typography Selector & Page Numbers -->
-        <div class="header-controls-row">
-          <div class="control-group">
-            <label for="font-select">Typography</label>
-            <select id="font-select" class="select-input">
-              <optgroup label="System Fonts">
-                <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Sans-Serif (Default)</option>
-                <option value="Arial, sans-serif">Arial</option>
-                <option value="Verdana, sans-serif">Verdana</option>
-                <option value="Georgia, serif">Georgia</option>
-                <option value="'Times New Roman', serif">Times New Roman</option>
-                <option value="'Courier New', monospace">Courier New</option>
-              </optgroup>
-              <optgroup label="Google Fonts">
-                <option value="Inter" selected>Inter</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Open Sans">Open Sans</option>
-                <option value="Montserrat">Montserrat</option>
-                <option value="Lora">Lora</option>
-                <option value="Merriweather">Merriweather</option>
-                <option value="Playfair Display">Playfair Display</option>
-                <option value="Fira Code">Fira Code</option>
-              </optgroup>
-            </select>
-          </div>
-
-          <div class="control-group">
-            <label class="checkbox-container" title="Show or hide page numbers">
-              <input type="checkbox" id="toggle-footer" />
-              <span class="checkbox-label">Page numbers</span>
-            </label>
           </div>
         </div>
       </header>
