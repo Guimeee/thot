@@ -99,9 +99,12 @@ function applyFontToAllPages() {
 }
 
 /**
- * Creates an A4 page element
+ * Creates an authentic A4 page element with responsive wrapper
  */
 function createPageElement(pageIndex, showFooter) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'a4-page-wrapper';
+
   const page = document.createElement('article');
   page.className = 'a4-page';
   page.dataset.pageNumber = pageIndex;
@@ -118,7 +121,8 @@ function createPageElement(pageIndex, showFooter) {
     page.appendChild(footer);
   }
 
-  return page;
+  wrapper.appendChild(page);
+  return wrapper;
 }
 
 /**
@@ -208,7 +212,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
     return;
   }
 
-  // 3. Paragraphs
+  // 3. Paragraphs (handles words AND line breaks <br>)
   if (tag === 'p') {
     content.removeChild(el);
 
@@ -221,7 +225,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
       }
     }
 
-    splitParagraphWords(el, createNextPage, () => content, maxHeight);
+    splitParagraphTokens(el, createNextPage, () => content, maxHeight);
     return;
   }
 
@@ -248,29 +252,40 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
   content.appendChild(el);
 }
 
-function splitParagraphWords(pEl, createNextPage, getCurrentContent, maxHeight) {
+/**
+ * Splits paragraphs token by token (<br> tags, spaces, words) across pages cleanly
+ */
+function splitParagraphTokens(pEl, createNextPage, getCurrentContent, maxHeight) {
   let content = getCurrentContent();
   const text = pEl.innerHTML;
-  const words = text.split(' ');
+  const tokens = text.split(/(<br\s*\/?>|\s+)/gi);
   pEl.innerHTML = '';
   content.appendChild(pEl);
 
   let currentP = pEl;
-  let wordBuf = [];
+  let tokenBuf = [];
 
-  for (let w = 0; w < words.length; w++) {
-    wordBuf.push(words[w]);
-    currentP.innerHTML = wordBuf.join(' ');
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
+    if (!token) continue;
+
+    tokenBuf.push(token);
+    currentP.innerHTML = tokenBuf.join('');
 
     if (content.scrollHeight > maxHeight) {
-      wordBuf.pop();
-      currentP.innerHTML = wordBuf.join(' ');
+      tokenBuf.pop();
+      currentP.innerHTML = tokenBuf.join('');
 
       content = createNextPage();
       currentP = document.createElement('p');
       content.appendChild(currentP);
-      wordBuf = [words[w]];
-      currentP.innerHTML = wordBuf.join(' ');
+
+      if (token.toLowerCase().startsWith('<br') || token.trim() === '') {
+        tokenBuf = [];
+      } else {
+        tokenBuf = [token];
+        currentP.innerHTML = token;
+      }
     }
   }
 }
@@ -333,12 +348,12 @@ function cleanOrphanHeadings() {
     }
   }
 
-  // Remove any empty pages created during adjustments
-  const allRendered = Array.from(previewCanvas.querySelectorAll('.a4-page'));
-  allRendered.forEach((page) => {
-    const content = page.querySelector('.page-content');
+  // Remove any empty page wrappers created during adjustments
+  const allWrappers = Array.from(previewCanvas.querySelectorAll('.a4-page-wrapper'));
+  allWrappers.forEach((wrapper) => {
+    const content = wrapper.querySelector('.page-content');
     if (content && content.children.length === 0 && previewCanvas.children.length > 1) {
-      page.remove();
+      wrapper.remove();
     }
   });
 }
@@ -358,24 +373,22 @@ function updateStats(text, totalPages) {
 }
 
 /**
- * Accurately measures the authentic A4 printable content height in pixels (~971px at standard 96dpi)
- * Works reliably across Desktop, Tablet, and Mobile screens.
+ * Calculates and updates scale factor for mobile preview so authentic A4 sheets fit screen width
  */
-function getA4MaxHeight() {
-  let measureEl = document.getElementById('a4-measure-ref');
-  if (!measureEl) {
-    measureEl = document.createElement('div');
-    measureEl.id = 'a4-measure-ref';
-    measureEl.style.cssText = 'position:fixed;left:-99999px;top:-99999px;width:210mm;height:297mm;padding:20mm;box-sizing:border-box;visibility:hidden;pointer-events:none;';
-    const inner = document.createElement('div');
-    inner.style.cssText = 'height:100%;box-sizing:border-box;';
-    measureEl.appendChild(inner);
-    document.body.appendChild(measureEl);
+function updateMobileScale() {
+  const canvasWidth = previewCanvas.clientWidth;
+  if (canvasWidth && canvasWidth < 820) {
+    // 210mm is 793.7px at standard 96 DPI
+    const a4PxWidth = 794;
+    const availableWidth = Math.max(canvasWidth - 20, 260);
+    const scale = Math.min(availableWidth / a4PxWidth, 1);
+    document.documentElement.style.setProperty('--page-scale', scale.toFixed(4));
+  } else {
+    document.documentElement.style.setProperty('--page-scale', '1');
   }
-  const inner = measureEl.firstElementChild;
-  const h = inner ? inner.clientHeight : 0;
-  return (h && h > 400) ? h : 971;
 }
+
+window.addEventListener('resize', updateMobileScale);
 
 /**
  * Automatic A4 pagination engine
@@ -395,18 +408,21 @@ function paginate() {
   const elements = Array.from(tempContainer.children);
 
   if (elements.length === 0) {
-    const emptyPage = createPageElement(1, showFooter);
-    previewCanvas.appendChild(emptyPage);
+    const emptyWrapper = createPageElement(1, showFooter);
+    previewCanvas.appendChild(emptyWrapper);
+    updateMobileScale();
     updateStats(markdownText, 1);
     return;
   }
 
   let pageIndex = 1;
-  let currentPage = createPageElement(pageIndex, showFooter);
-  previewCanvas.appendChild(currentPage);
+  let currentWrapper = createPageElement(pageIndex, showFooter);
+  previewCanvas.appendChild(currentWrapper);
+  let currentPage = currentWrapper.querySelector('.a4-page');
   let currentContent = currentPage.querySelector('.page-content');
 
-  const maxHeight = currentContent.clientHeight || getA4MaxHeight();
+  // True A4 printable height (297mm - 40mm margins = ~971px)
+  const maxHeight = currentContent.clientHeight || 971;
 
   for (let i = 0; i < elements.length; i++) {
     const el = elements[i];
@@ -414,8 +430,9 @@ function paginate() {
       el,
       () => {
         pageIndex++;
-        currentPage = createPageElement(pageIndex, showFooter);
-        previewCanvas.appendChild(currentPage);
+        currentWrapper = createPageElement(pageIndex, showFooter);
+        previewCanvas.appendChild(currentWrapper);
+        currentPage = currentWrapper.querySelector('.a4-page');
         currentContent = currentPage.querySelector('.page-content');
         return currentContent;
       },
@@ -438,6 +455,7 @@ function paginate() {
     });
   }
 
+  updateMobileScale();
   updateStats(markdownText, totalPages);
 }
 

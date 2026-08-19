@@ -404,8 +404,16 @@ html, body {
 }
 
 /* ==========================================================================
-   A4 Sheets (StackEdit-Inspired Style)
+   A4 Sheets (Authentic Scaled A4 Architecture)
    ========================================================================== */
+.a4-page-wrapper {
+  width: calc(var(--a4-width) * var(--page-scale, 1));
+  height: calc(var(--a4-height) * var(--page-scale, 1));
+  margin: 0 auto;
+  flex-shrink: 0;
+  position: relative;
+}
+
 .a4-page {
   width: var(--a4-width);
   height: var(--a4-height);
@@ -424,6 +432,8 @@ html, body {
   flex-direction: column;
   justify-content: space-between;
   flex-shrink: 0;
+  transform: scale(var(--page-scale, 1));
+  transform-origin: top left;
 
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
@@ -855,19 +865,19 @@ html, body {
     height: auto;
     padding: 8px 12px;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
     align-items: stretch;
     background: #ffffff;
     border-bottom: 1px solid var(--zinc-200);
   }
 
-  /* Row 1: Brand (left), Mode Switcher (center), Wiki (right) */
+  /* Row 1: Brand (left), Mode Switcher (center), Export PDF (right) */
   .header-main-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 8px;
+    gap: 6px;
   }
 
   .brand-badge {
@@ -889,8 +899,8 @@ html, body {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 4px 9px;
-    font-size: 0.75rem;
+    padding: 4px 8px;
+    font-size: 0.74rem;
     font-weight: 500;
     font-family: var(--font-sans);
     color: var(--zinc-600);
@@ -915,27 +925,27 @@ html, body {
     gap: 6px;
   }
 
-  .btn-secondary {
+  .btn-primary {
     padding: 4px 10px;
     font-size: 0.76rem;
-    flex-shrink: 0;
+    white-space: nowrap;
   }
 
-  /* Row 2: Typography, Page numbers (left) & Export PDF (right) */
+  /* Row 2: Typography, Page numbers (left) & Wiki (right) */
   .header-controls-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-top: 6px;
+    padding-top: 5px;
     border-top: 1px solid var(--zinc-100);
-    gap: 8px;
+    gap: 6px;
   }
 
   .controls-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 1;
     min-width: 0;
   }
@@ -949,38 +959,37 @@ html, body {
   .control-group {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     flex-shrink: 1;
     min-width: 0;
   }
 
   .control-group label {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: var(--zinc-600);
     white-space: nowrap;
   }
 
   .select-input {
-    padding: 4px 6px;
-    font-size: 0.76rem;
-    max-width: 110px;
+    padding: 3px 5px;
+    font-size: 0.74rem;
+    max-width: 100px;
   }
 
   .checkbox-label {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     white-space: nowrap;
   }
 
-  .btn-primary {
-    padding: 5px 12px;
-    font-size: 0.76rem;
-    white-space: nowrap;
+  .btn-secondary {
+    padding: 3px 8px;
+    font-size: 0.74rem;
   }
 
   /* Main Container on Mobile */
   .main-container {
-    height: calc(100dvh - 86px);
-    height: calc(100vh - 86px);
+    height: calc(100dvh - 84px);
+    height: calc(100vh - 84px);
     position: relative;
   }
 
@@ -1028,61 +1037,10 @@ html, body {
 
   /* Preview Canvas & Paper Sheets on Screen */
   .preview-canvas {
-    padding: 16px 12px 60px 12px;
-    gap: 20px;
+    padding: 14px 8px 60px 8px;
+    gap: 18px;
     background-color: var(--zinc-100);
     align-items: center;
-  }
-
-  .a4-page {
-    width: 100% !important;
-    max-width: 480px !important;
-    min-width: 0 !important;
-    aspect-ratio: 210 / 297 !important; /* Authentic A4 Paper Ratio */
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-    padding: 24px 20px 20px 20px !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07) !important;
-    border-radius: 6px !important;
-    background-color: #ffffff !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    box-sizing: border-box !important;
-  }
-
-  .page-content {
-    flex: 1 !important;
-    overflow: hidden !important;
-    font-size: 10pt !important;
-    line-height: 1.65 !important;
-  }
-
-  .page-content h1 {
-    font-size: 1.45rem !important;
-    margin-bottom: 10pt !important;
-  }
-
-  .page-content h2 {
-    font-size: 1.2rem !important;
-    margin-top: 14pt !important;
-  }
-
-  .page-content h3 {
-    font-size: 1.05rem !important;
-  }
-
-  .page-content table {
-    display: block;
-    overflow-x: auto;
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .page-content pre {
-    padding: 10px 12px !important;
-    font-size: 8.5pt !important;
   }
 
   /* Wiki Modal */
@@ -1156,7 +1114,25 @@ html, body {
     background: transparent !important;
   }
 
+  .a4-page-wrapper {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .a4-page-wrapper:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
   .a4-page {
+    transform: none !important;
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;
@@ -1167,14 +1143,7 @@ html, body {
     border: none !important;
     border-radius: 0 !important;
     background: #ffffff !important;
-    page-break-after: always !important;
-    break-after: page !important;
     box-sizing: border-box !important;
-  }
-
-  .a4-page:last-child {
-    page-break-after: auto !important;
-    break-after: auto !important;
   }
 
   .page-footer {
