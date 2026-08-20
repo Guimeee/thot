@@ -1092,10 +1092,11 @@ html, body {
     flex: 1 1 0% !important;
     min-height: 0 !important;
     height: 100% !important;
-    padding: 16px 14px calc(50vh + 60px) 14px !important;
-    scroll-padding-bottom: 40vh !important;
+    padding: 18px 16px calc(50vh + 80px) 16px !important;
+    scroll-padding-top: 30px !important;
+    scroll-padding-bottom: 90px !important;
     font-size: 16px !important; /* Prevents iOS auto-zoom on input focus */
-    line-height: 1.6;
+    line-height: 1.65;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
     overscroll-behavior-y: contain !important;

@@ -459,55 +459,11 @@ function paginate() {
   updateStats(markdownText, totalPages);
 }
 
-/**
- * Automatically keeps the active typing caret visible above the mobile virtual keyboard
- */
-function scrollCaretIntoView() {
-  if (window.innerWidth > 768) return;
-
-  const selectionStart = markdownInput.selectionStart;
-  const textBefore = markdownInput.value.substring(0, selectionStart);
-  const lineCount = textBefore.split('\n').length;
-
-  const computedStyle = window.getComputedStyle(markdownInput);
-  const lineHeight = parseFloat(computedStyle.lineHeight) || 25.6;
-  const paddingTop = parseFloat(computedStyle.paddingTop) || 16;
-
-  const caretY = paddingTop + (lineCount - 1) * lineHeight;
-  const viewHeight = markdownInput.clientHeight;
-  const currentScroll = markdownInput.scrollTop;
-
-  // Keep caret within the comfortable visible zone of the textarea
-  const lowerThreshold = currentScroll + viewHeight - 80;
-  const upperThreshold = currentScroll + 30;
-
-  if (caretY > lowerThreshold) {
-    markdownInput.scrollTop = caretY - (viewHeight * 0.45);
-  } else if (caretY < upperThreshold) {
-    markdownInput.scrollTop = Math.max(0, caretY - 40);
-  }
-}
-
-// Typing debounce and automatic caret visibility
+// Typing debounce
 let debounceTimer;
 markdownInput.addEventListener('input', () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(paginate, 30);
-  scrollCaretIntoView();
-});
-
-markdownInput.addEventListener('focus', () => {
-  setTimeout(scrollCaretIntoView, 250);
-});
-
-markdownInput.addEventListener('click', () => {
-  setTimeout(scrollCaretIntoView, 50);
-});
-
-markdownInput.addEventListener('keyup', (e) => {
-  if (['ArrowUp', 'ArrowDown', 'Enter', 'Backspace'].includes(e.key)) {
-    scrollCaretIntoView();
-  }
 });
 
 // Synchronized scrolling between editor and preview (StackEdit feature)
@@ -686,7 +642,6 @@ function handleViewportChange() {
     if (window.scrollY !== 0 || window.scrollX !== 0) {
       window.scrollTo(0, 0);
     }
-    setTimeout(scrollCaretIntoView, 60);
   }
 }
 
