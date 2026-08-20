@@ -132,13 +132,21 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
   let content = getCurrentContent();
   content.appendChild(el);
 
+  // If it fits completely on the current page, we're done
   if (content.scrollHeight <= maxHeight) {
     return;
   }
 
   const tag = el.tagName.toLowerCase();
 
-  // 1. Lists (UL / OL)
+  // 1. Paragraphs (split token by token: words, spaces, <br> line breaks)
+  if (tag === 'p') {
+    content.removeChild(el);
+    splitParagraphTokens(el, createNextPage, getCurrentContent, maxHeight);
+    return;
+  }
+
+  // 2. Lists (UL / OL)
   if (tag === 'ul' || tag === 'ol') {
     const items = Array.from(el.children);
     content.removeChild(el);
@@ -158,7 +166,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
       if (content.scrollHeight > maxHeight) {
         currentList.removeChild(item);
 
-        if (currentList.children.length === 0) {
+        if (currentList.children.length === 0 && currentList.parentNode === content) {
           content.removeChild(currentList);
         }
 
@@ -175,7 +183,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
     return;
   }
 
-  // 2. Tables
+  // 3. Tables
   if (tag === 'table') {
     const thead = el.querySelector('thead');
     const tbody = el.querySelector('tbody');
@@ -196,7 +204,7 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
       if (content.scrollHeight > maxHeight) {
         currentTbody.removeChild(row);
 
-        if (currentTbody.children.length === 0) {
+        if (currentTbody.children.length === 0 && currentTable.parentNode === content) {
           content.removeChild(currentTable);
         }
 
@@ -212,43 +220,28 @@ function appendOrSplit(el, createNextPage, getCurrentContent, maxHeight) {
     return;
   }
 
-  // 3. Paragraphs (handles words AND line breaks <br>)
-  if (tag === 'p') {
-    content.removeChild(el);
-
-    if (content.children.length > 0) {
-      content = createNextPage();
-      content.appendChild(el);
-
-      if (content.scrollHeight <= maxHeight) {
-        return;
-      }
-    }
-
-    splitParagraphTokens(el, createNextPage, () => content, maxHeight);
-    return;
-  }
-
   // 4. Code Blocks (PRE)
   if (tag === 'pre') {
     content.removeChild(el);
-
-    if (content.children.length > 0) {
-      content = createNextPage();
-      content.appendChild(el);
-
-      if (content.scrollHeight <= maxHeight) {
-        return;
-      }
-    }
-
-    splitPreLines(el, createNextPage, () => content, maxHeight);
+    splitPreLines(el, createNextPage, getCurrentContent, maxHeight);
     return;
   }
 
-  // Headings, blockquotes, images, hr
+  // 5. Headings (H1-H6) - prevent orphan headings at the bottom of pages
+  if (/^h[1-6]$/.test(tag)) {
+    content.removeChild(el);
+    if (content.children.length > 0 && content.scrollHeight + 100 > maxHeight) {
+      content = createNextPage();
+    }
+    content.appendChild(el);
+    return;
+  }
+
+  // 6. Blockquotes, HR, Images, and other blocks
   content.removeChild(el);
-  content = createNextPage();
+  if (content.children.length > 0) {
+    content = createNextPage();
+  }
   content.appendChild(el);
 }
 
@@ -276,8 +269,13 @@ function splitParagraphTokens(pEl, createNextPage, getCurrentContent, maxHeight)
       tokenBuf.pop();
       currentP.innerHTML = tokenBuf.join('');
 
+      if (tokenBuf.length === 0 && currentP.parentNode === content) {
+        content.removeChild(currentP);
+      }
+
       content = createNextPage();
       currentP = document.createElement('p');
+      currentP.style.fontFamily = currentFontFamily;
       content.appendChild(currentP);
 
       if (token.toLowerCase().startsWith('<br') || token.trim() === '') {
@@ -296,8 +294,6 @@ function splitPreLines(preEl, createNextPage, getCurrentContent, maxHeight) {
   const rawCode = codeEl ? codeEl.textContent : preEl.textContent;
   const lines = rawCode.split('\n');
 
-  content.removeChild(preEl);
-
   let currentPre = document.createElement('pre');
   let currentCode = document.createElement('code');
   if (codeEl && codeEl.className) currentCode.className = codeEl.className;
@@ -313,42 +309,27 @@ function splitPreLines(preEl, createNextPage, getCurrentContent, maxHeight) {
       lineBuf.pop();
       currentCode.textContent = lineBuf.join('\n');
 
+      if (lineBuf.length === 0 && currentPre.parentNode === content) {
+        content.removeChild(currentPre);
+      }
+
       content = createNextPage();
       currentPre = document.createElement('pre');
       currentCode = document.createElement('code');
       if (codeEl && codeEl.className) currentCode.className = codeEl.className;
       currentPre.appendChild(currentCode);
       content.appendChild(currentPre);
+
       lineBuf = [lines[l]];
-      currentCode.textContent = lineBuf.join('\n');
+      currentCode.textContent = lines[l];
     }
   }
 }
 
 /**
- * Prevents orphan headings and dividers at page breaks
+ * Removes any empty page wrappers created during adjustments
  */
 function cleanOrphanHeadings() {
-  const pages = Array.from(previewCanvas.querySelectorAll('.a4-page'));
-  for (let i = 0; i < pages.length - 1; i++) {
-    const currentContent = pages[i].querySelector('.page-content');
-    const nextContent = pages[i + 1].querySelector('.page-content');
-
-    if (currentContent && nextContent) {
-      while (currentContent.lastElementChild) {
-        const last = currentContent.lastElementChild;
-        const tag = last.tagName.toUpperCase();
-        if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HR'].includes(tag)) {
-          currentContent.removeChild(last);
-          nextContent.insertBefore(last, nextContent.firstElementChild);
-        } else {
-          break;
-        }
-      }
-    }
-  }
-
-  // Remove any empty page wrappers created during adjustments
   const allWrappers = Array.from(previewCanvas.querySelectorAll('.a4-page-wrapper'));
   allWrappers.forEach((wrapper) => {
     const content = wrapper.querySelector('.page-content');
