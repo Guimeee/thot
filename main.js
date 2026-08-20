@@ -627,6 +627,27 @@ A minimalist Markdown editor designed for distraction-free writing and clean **A
 > Written with [Thot](https://guillaumehonore.com/thot)
 `;
 
+// Ensure mobile window/body is strictly pinned at (0, 0) and header is never lost
+window.addEventListener('scroll', () => {
+  if (window.scrollY !== 0 || window.scrollX !== 0) {
+    window.scrollTo(0, 0);
+  }
+});
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    updateMobileScale();
+    if (window.scrollY !== 0 || window.scrollX !== 0) {
+      window.scrollTo(0, 0);
+    }
+  });
+  window.visualViewport.addEventListener('scroll', () => {
+    if (window.scrollY !== 0 || window.scrollX !== 0) {
+      window.scrollTo(0, 0);
+    }
+  });
+}
+
 // Initialisation
 markdownInput.value = initialMarkdown;
 setFont(fontSelect.value);

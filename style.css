@@ -38,6 +38,9 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   font-family: var(--font-sans);
   color: var(--zinc-900);
   background-color: #ffffff;
@@ -45,6 +48,11 @@ html, body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 ::selection {
@@ -72,17 +80,28 @@ html, body {
 }
 
 #app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  height: 100dvh;
+  width: 100%;
   width: 100vw;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 /* ==========================================================================
    Minimalist Top Header
    ========================================================================== */
 .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -294,10 +313,13 @@ html, body {
    ========================================================================== */
 .main-container {
   display: flex;
-  flex: 1;
-  height: calc(100vh - 52px);
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
   background-color: #ffffff;
+  position: relative;
 }
 
 .pane-header {
@@ -336,11 +358,14 @@ html, body {
    White Minimalist Editor Pane
    ========================================================================== */
 .editor-pane {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
   border-right: 1px solid var(--zinc-200);
+  overflow: hidden;
 }
 
 .editor-pane .pane-header {
@@ -355,7 +380,9 @@ html, body {
 }
 
 #markdown-input {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
   width: 100%;
   padding: 28px 36px;
   background: #ffffff;
@@ -368,6 +395,8 @@ html, body {
   line-height: 1.7;
   tab-size: 2;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 #markdown-input::selection {
@@ -383,7 +412,9 @@ html, body {
    StackEdit-Style Preview Pane
    ========================================================================== */
 .preview-pane {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--zinc-50);
@@ -402,7 +433,9 @@ html, body {
 }
 
 .preview-canvas {
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
   overflow-y: auto;
   padding: 24px 20px 60px 20px;
   display: flex;
@@ -410,6 +443,8 @@ html, body {
   align-items: center;
   gap: 24px;
   background-color: var(--zinc-50);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 /* ==========================================================================
@@ -860,17 +895,33 @@ html, body {
 @media (max-width: 768px) {
   html, body {
     height: 100%;
+    width: 100%;
     overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   #app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
     height: 100dvh;
-    height: 100vh;
+    width: 100%;
     overflow: hidden;
   }
 
-  /* Header on Mobile: 2 distinct, comfortable rows */
+  /* Header on Mobile: pinned at the top, cannot scroll away */
   .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
     height: auto;
     padding: 8px 12px;
     flex-direction: column;
@@ -1000,17 +1051,23 @@ html, body {
 
   /* Main Container on Mobile */
   .main-container {
-    height: calc(100dvh - 84px);
-    height: calc(100vh - 84px);
-    position: relative;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
 
   /* Pane Visibility Switching */
   #app[data-mobile-view="edit"] .editor-pane {
     display: flex !important;
     width: 100% !important;
-    flex: 1 !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
     border-right: none;
+    overflow: hidden !important;
   }
 
   #app[data-mobile-view="edit"] .preview-pane {
@@ -1024,19 +1081,29 @@ html, body {
   #app[data-mobile-view="preview"] .preview-pane {
     display: flex !important;
     width: 100% !important;
-    flex: 1 !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
   }
 
   /* Editor Textarea */
   #markdown-input {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
     padding: 16px 14px;
     font-size: 16px !important; /* Prevents iOS auto-zoom on input focus */
     line-height: 1.6;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
   }
 
   .pane-header {
     padding: 6px 12px;
     height: 32px;
+    flex-shrink: 0;
   }
 
   .pane-header h2 {
@@ -1049,10 +1116,16 @@ html, body {
 
   /* Preview Canvas & Paper Sheets on Screen */
   .preview-canvas {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    height: 100% !important;
     padding: 14px 8px 60px 8px;
     gap: 18px;
     background-color: var(--zinc-100);
     align-items: center;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
   }
 
   /* Wiki Modal */
